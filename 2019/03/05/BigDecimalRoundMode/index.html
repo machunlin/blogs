@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/blogs/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/blogs/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/blogs/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/blogs/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/blogs/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/blogs/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/blogs/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="java,pay,性能分析,支付">
+
+
+
+
+
+  <link rel="alternate" href="/blogs/atom.xml" title="try-catch的博客" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="java涉及金额计算的场景，不要使用float或double进行计算，会丢失精度。 一般使用BigDecimal工具类，并配合“舍入模式(Rounding mode)”和小数精度(scale)。Rounding Mode概念不好理解，也不容易讲清楚，看到这篇博客讲的非常好，转载之。 原文链接： BigDecimal 舍入模式（Rounding mode）介绍 1、RoundingMode介绍123">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BigDecimal工具类之RoundMode">
+<meta property="og:url" content="https://machunlin.github.io/blogs/2019/03/05/BigDecimalRoundMode/index.html">
+<meta property="og:site_name" content="try-catch的博客">
+<meta property="og:description" content="java涉及金额计算的场景，不要使用float或double进行计算，会丢失精度。 一般使用BigDecimal工具类，并配合“舍入模式(Rounding mode)”和小数精度(scale)。Rounding Mode概念不好理解，也不容易讲清楚，看到这篇博客讲的非常好，转载之。 原文链接： BigDecimal 舍入模式（Rounding mode）介绍 1、RoundingMode介绍123">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://i2.bvimg.com/678568/afd0db0b01c619bbs.png">
+<meta property="og:image" content="http://i2.bvimg.com/678568/1927eb3f90a8ad3as.png">
+<meta property="og:image" content="http://i2.bvimg.com/678568/834a090d6dfc1c69s.png">
+<meta property="og:image" content="http://i2.bvimg.com/678568/b96799b973fefcbas.png">
+<meta property="og:image" content="http://i2.bvimg.com/678568/a57fb3e376c30c6es.png">
+<meta property="og:image" content="http://i2.bvimg.com/678568/5b77f86f501098b6s.png">
+<meta property="og:updated_time" content="2019-03-05T10:30:09.015Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="BigDecimal工具类之RoundMode">
+<meta name="twitter:description" content="java涉及金额计算的场景，不要使用float或double进行计算，会丢失精度。 一般使用BigDecimal工具类，并配合“舍入模式(Rounding mode)”和小数精度(scale)。Rounding Mode概念不好理解，也不容易讲清楚，看到这篇博客讲的非常好，转载之。 原文链接： BigDecimal 舍入模式（Rounding mode）介绍 1、RoundingMode介绍123">
+<meta name="twitter:image" content="http://i2.bvimg.com/678568/afd0db0b01c619bbs.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/blogs/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://machunlin.github.io/blogs/2019/03/05/BigDecimalRoundMode/">
+
+
+
+
+
+  <title>BigDecimal工具类之RoundMode | try-catch的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/blogs/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">try-catch的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/blogs/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/blogs/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://machunlin.github.io/blogs/blogs/2019/03/05/BigDecimalRoundMode/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="machunlin">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/blogs/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="try-catch的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">BigDecimal工具类之RoundMode</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-05T18:28:15+08:00">
+                2019-03-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>java涉及金额计算的场景，不要使用float或double进行计算，会丢失精度。</p>
+<p>一般使用BigDecimal工具类，并配合“舍入模式(Rounding mode)”和小数精度(scale)。<br>Rounding Mode概念不好理解，也不容易讲清楚，看到这篇博客讲的非常好，转载之。</p>
+<p>原文链接： <a href="https://my.oschina.net/sunchp/blog/670909" target="_blank" rel="noopener">BigDecimal 舍入模式（Rounding mode）介绍</a></p>
+<h1 id="1、RoundingMode介绍"><a href="#1、RoundingMode介绍" class="headerlink" title="1、RoundingMode介绍"></a>1、RoundingMode介绍</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line">package java.math;</span><br><span class="line"></span><br><span class="line">public enum RoundingMode &#123;</span><br><span class="line"></span><br><span class="line">    UP(BigDecimal.ROUND_UP),</span><br><span class="line"></span><br><span class="line">    DOWN(BigDecimal.ROUND_DOWN),</span><br><span class="line"></span><br><span class="line">    CEILING(BigDecimal.ROUND_CEILING),</span><br><span class="line"></span><br><span class="line">    FLOOR(BigDecimal.ROUND_FLOOR),</span><br><span class="line"></span><br><span class="line">    HALF_UP(BigDecimal.ROUND_HALF_UP),</span><br><span class="line"></span><br><span class="line">    HALF_DOWN(BigDecimal.ROUND_HALF_DOWN),</span><br><span class="line"></span><br><span class="line">    HALF_EVEN(BigDecimal.ROUND_HALF_EVEN),</span><br><span class="line"></span><br><span class="line">    UNNECESSARY(BigDecimal.ROUND_UNNECESSARY);</span><br><span class="line"></span><br><span class="line">    final int oldMode;</span><br><span class="line"></span><br><span class="line">    private RoundingMode(int oldMode) &#123;</span><br><span class="line">        this.oldMode = oldMode;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static RoundingMode valueOf(int rm) &#123;</span><br><span class="line">        switch(rm) &#123;</span><br><span class="line"></span><br><span class="line">        case BigDecimal.ROUND_UP:</span><br><span class="line">            return UP;</span><br><span class="line"></span><br><span class="line">        case BigDecimal.ROUND_DOWN:</span><br><span class="line">            return DOWN;</span><br><span class="line"></span><br><span class="line">        case BigDecimal.ROUND_CEILING:</span><br><span class="line">            return CEILING;</span><br><span class="line"></span><br><span class="line">        case BigDecimal.ROUND_FLOOR:</span><br><span class="line">            return FLOOR;</span><br><span class="line"></span><br><span class="line">        case BigDecimal.ROUND_HALF_UP:</span><br><span class="line">            return HALF_UP;</span><br><span class="line"></span><br><span class="line">        case BigDecimal.ROUND_HALF_DOWN:</span><br><span class="line">            return HALF_DOWN;</span><br><span class="line"></span><br><span class="line">        case BigDecimal.ROUND_HALF_EVEN:</span><br><span class="line">            return HALF_EVEN;</span><br><span class="line"></span><br><span class="line">        case BigDecimal.ROUND_UNNECESSARY:</span><br><span class="line">            return UNNECESSARY;</span><br><span class="line"></span><br><span class="line">        default:</span><br><span class="line">            throw new IllegalArgumentException(&quot;argument out of range&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>RoundingMode是一个枚举类，有以下几个值：UP，DOWN，CEILING，FLOOR，HALF_UP，HALF_DOWN，HALF_EVEN，UNNECESSARY</p>
+<p>2 舍入模式</p>
+<p>2.1 UP</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public final static int ROUND_UP = 0;</span><br></pre></td></tr></table></figure>
+<p>定义：远离零方向舍入。</p>
+<p>解释：始终对非零舍弃部分前面的数字加 1。注意，此舍入模式始终不会减少计算值的绝对值。</p>
+<p>图示：<br><img src="http://i2.bvimg.com/678568/afd0db0b01c619bbs.png" alt="Markdown"></p>
+<p>示例：</p>
+<table>
+<thead>
+<tr>
+<th>输入数字</th>
+<th>使用 UP 舍入模式将输入数字舍入为一位数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5.5</td>
+<td>6</td>
+</tr>
+<tr>
+<td>2.5</td>
+<td>3</td>
+</tr>
+<tr>
+<td>1.6</td>
+<td>2</td>
+</tr>
+<tr>
+<td>1.1</td>
+<td>2</td>
+</tr>
+<tr>
+<td>1.0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>-1.0</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>-1.1</td>
+<td>-2</td>
+</tr>
+<tr>
+<td>-1.6</td>
+<td>-2</td>
+</tr>
+<tr>
+<td>-2.5</td>
+<td>-3</td>
+</tr>
+<tr>
+<td>-5.5</td>
+<td>-6</td>
+</tr>
+</tbody>
+</table>
+<p>2.2 DOWN</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public final static int ROUND_DOWN = 1;</span><br></pre></td></tr></table></figure>
+<p>定义：向零方向舍入。</p>
+<p>解释：从不对舍弃部分前面的数字加 1（即截尾）。注意，此舍入模式始终不会增加计算值的绝对值。</p>
+<p>图示：<br><img src="http://i2.bvimg.com/678568/1927eb3f90a8ad3as.png" alt="Markdown"></p>
+<p>示例：</p>
+<table>
+<thead>
+<tr>
+<th>输入数字</th>
+<th>使用 DOWN 舍入模式将输入数字舍入为一位数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5.5</td>
+<td>5</td>
+</tr>
+<tr>
+<td>2.5</td>
+<td>2</td>
+</tr>
+<tr>
+<td>1.6</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1.1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1.0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>-1.0</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>-1.1</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>-1.6</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>-2.5</td>
+<td>-2</td>
+</tr>
+<tr>
+<td>-5.5</td>
+<td>-5</td>
+</tr>
+</tbody>
+</table>
+<p>2.3 CEILING</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public final static int ROUND_CEILING = 2;</span><br></pre></td></tr></table></figure>
+<p>定义：向正无限大方向舍入。</p>
+<p>解释：如果结果为正，则舍入行为类似于 RoundingMode.UP；如果结果为负，则舍入行为类似于RoundingMode.DOWN。注意，此舍入模式始终不会减少计算值。</p>
+<p>图示：<br><img src="http://i2.bvimg.com/678568/834a090d6dfc1c69s.png" alt="Markdown"></p>
+<p>示例：</p>
+<table>
+<thead>
+<tr>
+<th>输入数字</th>
+<th>使用 CEILING 舍入模式将输入数字舍入为一位数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5.5</td>
+<td>6</td>
+</tr>
+<tr>
+<td>2.5</td>
+<td>3</td>
+</tr>
+<tr>
+<td>1.6</td>
+<td>2</td>
+</tr>
+<tr>
+<td>1.1</td>
+<td>2</td>
+</tr>
+<tr>
+<td>1.0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>-1.0</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>-1.1</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>-1.6</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>-2.5</td>
+<td>-2</td>
+</tr>
+<tr>
+<td>-5.5</td>
+<td>-5</td>
+</tr>
+</tbody>
+</table>
+<p>2.4 FLOOR</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public final static int ROUND_FLOOR = 3;</span><br></pre></td></tr></table></figure>
+<p>定义：向负无限大方向舍入。</p>
+<p>解释：如果结果为正，则舍入行为类似于 RoundingMode.DOWN；如果结果为负，则舍入行为类似于RoundingMode.UP。注意，此舍入模式始终不会增加计算值。</p>
+<p>图示：<br><img src="http://i2.bvimg.com/678568/b96799b973fefcbas.png" alt="Markdown"></p>
+<p>示例：</p>
+<table>
+<thead>
+<tr>
+<th>输入数字</th>
+<th>使用 FLOOR 舍入模式将输入数字舍入为一位数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5.5</td>
+<td>5</td>
+</tr>
+<tr>
+<td>2.5</td>
+<td>2</td>
+</tr>
+<tr>
+<td>1.6</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1.1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1.0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>-1.0</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>-1.1</td>
+<td>-2</td>
+</tr>
+<tr>
+<td>-1.6</td>
+<td>-2</td>
+</tr>
+<tr>
+<td>-2.5</td>
+<td>-3</td>
+</tr>
+<tr>
+<td>-5.5</td>
+<td>-6</td>
+</tr>
+</tbody>
+</table>
+<p>2.5 HALF_UP （Half指的中点值，例如0.5、0.05，0.15等等）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public final static int ROUND_HALF_UP = 4;</span><br></pre></td></tr></table></figure>
+<p>定义：向最接近的数字方向舍入，如果与两个相邻数字的距离相等，则向上舍入。</p>
+<p>解释：如果被舍弃部分 &gt;= 0.5，则舍入行为同 RoundingMode.UP；否则舍入行为同RoundingMode.DOWN。注意，此舍入模式就是通常学校里讲的四舍五入。</p>
+<p>图示：</p>
+<p>示例：</p>
+<table>
+<thead>
+<tr>
+<th>输入数字</th>
+<th>使用 HALF_UP 舍入模式将输入数字舍入为一位数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5.5</td>
+<td>6</td>
+</tr>
+<tr>
+<td>2.5</td>
+<td>3</td>
+</tr>
+<tr>
+<td>1.6</td>
+<td>2</td>
+</tr>
+<tr>
+<td>1.1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1.0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>-1.0</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>-1.1</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>-1.6</td>
+<td>-2</td>
+</tr>
+<tr>
+<td>-2.5</td>
+<td>-3</td>
+</tr>
+<tr>
+<td>-5.5</td>
+<td>-6</td>
+</tr>
+</tbody>
+</table>
+<p>2.6 HALF_DOWN</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public final static int ROUND_HALF_DOWN = 5;</span><br></pre></td></tr></table></figure>
+<p>定义：向最接近的数字方向舍入，如果与两个相邻数字的距离相等，则向下舍入。</p>
+<p>解释：如果被舍弃部分 &gt; 0.5，则舍入行为同 RoundingMode.UP；否则舍入行为同RoundingMode.DOWN。注意，此舍入模式就是通常讲的五舍六入。</p>
+<p>图示：</p>
+<p><img src="http://i2.bvimg.com/678568/a57fb3e376c30c6es.png" alt="Markdown"></p>
+<p>示例：</p>
+<table>
+<thead>
+<tr>
+<th>输入数字</th>
+<th>使用 HALF_DOWN 舍入模式将输入数字舍入为一位数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5.5</td>
+<td>5</td>
+</tr>
+<tr>
+<td>2.5</td>
+<td>2</td>
+</tr>
+<tr>
+<td>1.6</td>
+<td>2</td>
+</tr>
+<tr>
+<td>1.1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1.0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>-1.0</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>-1.1</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>-1.6</td>
+<td>-2</td>
+</tr>
+<tr>
+<td>-2.5</td>
+<td>-2</td>
+</tr>
+<tr>
+<td>-5.5</td>
+<td>-5</td>
+</tr>
+</tbody>
+</table>
+<p>2.7 HALF_EVEN</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public final static int ROUND_HALF_EVEN = 6;</span><br></pre></td></tr></table></figure>
+<p>定义：向最接近数字方向舍入，如果与两个相邻数字的距离相等，则向相邻的偶数舍入。</p>
+<p>解释：如果舍弃部分左边的数字为奇数，则舍入行为同 RoundingMode.HALF_UP；如果为偶数，则舍入行为同RoundingMode.HALF_DOWN。注意，在重复进行一系列计算时，根据统计学，此舍入模式可以在统计上将累加错误减到最小。此舍入模式也称为“银行家舍入法”，主要在美国使用。此舍入模式类似于 Java 中对float 和double 算法使用的舍入策略。</p>
+<p>图示：</p>
+<p><img src="http://i2.bvimg.com/678568/5b77f86f501098b6s.png" alt="Markdown"></p>
+<p>示例：</p>
+<p>|输入数字|    使用 HALF_EVEN 舍入模式将输入数字舍入为一位数|<br>|5.5|    6|<br>|2.5|    2|<br>|1.6|    2|<br>|1.1|    1|<br>|1.0|    1|<br>|-1.0|    -1|<br>|-1.1|    -1|<br>|-1.6|    -2|<br>|-2.5|    -2|<br>|-5.5|    -6|</p>
+<p>2.8 UNNECESSARY</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public final static int ROUND_UNNECESSARY =  7;</span><br></pre></td></tr></table></figure>
+<p>定义：用于断言请求的操作具有精确结果，因此不发生舍入。</p>
+<p>解释：计算结果是精确的，不需要舍入，否则抛出 ArithmeticException。</p>
+<p>示例：</p>
+<table>
+<thead>
+<tr>
+<th>输入数字</th>
+<th>使用 UNNECESSARY 舍入模式将输入数字舍入为一位数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5.5</td>
+<td>抛出 ArithmeticException</td>
+</tr>
+<tr>
+<td>2.5</td>
+<td>抛出 ArithmeticException</td>
+</tr>
+<tr>
+<td>1.6</td>
+<td>抛出 ArithmeticException</td>
+</tr>
+<tr>
+<td>1.1</td>
+<td>抛出 ArithmeticException</td>
+</tr>
+<tr>
+<td>1.0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>-1.0</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>-1.1</td>
+<td>抛出 ArithmeticException</td>
+</tr>
+<tr>
+<td>-1.6</td>
+<td>抛出 ArithmeticException</td>
+</tr>
+<tr>
+<td>-2.5</td>
+<td>抛出 ArithmeticException</td>
+</tr>
+<tr>
+<td>-5.5</td>
+<td>抛出 ArithmeticException</td>
+</tr>
+</tbody>
+</table>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blogs/2019/03/02/paycenter/" rel="next" title="支付中心设计">
+                <i class="fa fa-chevron-left"></i> 支付中心设计
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/blogs/images/avatar.gif" alt="machunlin">
+            
+              <p class="site-author-name" itemprop="name">machunlin</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/blogs/archives/">
+              
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/blogs/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/machunlin" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:machunlin@126.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1、RoundingMode介绍"><span class="nav-number">1.</span> <span class="nav-text">1、RoundingMode介绍</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">machunlin</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/blogs/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blogs/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blogs/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blogs/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blogs/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blogs/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/blogs/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/blogs/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/blogs/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/blogs/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/blogs/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+        <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+      <style>
+        a.gitment-editor-footer-tip { display: none; }
+        .gitment-container.gitment-footer-container { display: none; }
+      </style>
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitment({
+            id: window.location.pathname, 
+            owner: 'machunlin',
+            repo: 'blogs',
+            
+            oauth: {
+            
+            
+                client_secret: 'fe23f1597b5866e6b48fec0bbd4e74d2d4054a7e',
+            
+                client_id: '60d1e77110f1812a357b'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

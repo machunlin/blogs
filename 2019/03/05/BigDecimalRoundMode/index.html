@@ -73,6 +73,8 @@
 
 
 
+  
+
 
   <link rel="alternate" href="/blogs/atom.xml" title="try-catch的博客" type="application/atom+xml">
 
@@ -81,12 +83,12 @@
 
 
 
-<meta name="description" content="java涉及金额计算的场景，不要使用float或double进行计算，会丢失精度。 一般使用BigDecimal工具类，并配合“舍入模式(Rounding mode)”和小数精度(scale)。Rounding Mode概念不好理解，也不容易讲清楚，看到这篇博客讲的非常好，转载之。 原文链接： BigDecimal 舍入模式（Rounding mode）介绍 1、RoundingMode介绍123">
+<meta name="description" content="java涉及金额计算的场景，不要使用float或double进行计算，会丢失精度。 一般使用BigDecimal工具类，并配合“舍入模式(Rounding mode)”和小数精度(scale)。Rounding Mode概念不好理解，也不容易讲清楚，看到这篇博客讲的非常好，转载之。 原文链接： BigDecimal 舍入模式（Rounding mode）介绍 RoundingMode介绍12345">
 <meta property="og:type" content="article">
 <meta property="og:title" content="BigDecimal工具类之RoundMode">
 <meta property="og:url" content="https://machunlin.github.io/blogs/2019/03/05/BigDecimalRoundMode/index.html">
 <meta property="og:site_name" content="try-catch的博客">
-<meta property="og:description" content="java涉及金额计算的场景，不要使用float或double进行计算，会丢失精度。 一般使用BigDecimal工具类，并配合“舍入模式(Rounding mode)”和小数精度(scale)。Rounding Mode概念不好理解，也不容易讲清楚，看到这篇博客讲的非常好，转载之。 原文链接： BigDecimal 舍入模式（Rounding mode）介绍 1、RoundingMode介绍123">
+<meta property="og:description" content="java涉及金额计算的场景，不要使用float或double进行计算，会丢失精度。 一般使用BigDecimal工具类，并配合“舍入模式(Rounding mode)”和小数精度(scale)。Rounding Mode概念不好理解，也不容易讲清楚，看到这篇博客讲的非常好，转载之。 原文链接： BigDecimal 舍入模式（Rounding mode）介绍 RoundingMode介绍12345">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://i2.bvimg.com/678568/afd0db0b01c619bbs.png">
 <meta property="og:image" content="http://i2.bvimg.com/678568/1927eb3f90a8ad3as.png">
@@ -94,10 +96,10 @@
 <meta property="og:image" content="http://i2.bvimg.com/678568/b96799b973fefcbas.png">
 <meta property="og:image" content="http://i2.bvimg.com/678568/a57fb3e376c30c6es.png">
 <meta property="og:image" content="http://i2.bvimg.com/678568/5b77f86f501098b6s.png">
-<meta property="og:updated_time" content="2019-03-05T10:30:09.015Z">
+<meta property="og:updated_time" content="2019-03-05T10:34:41.389Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="BigDecimal工具类之RoundMode">
-<meta name="twitter:description" content="java涉及金额计算的场景，不要使用float或double进行计算，会丢失精度。 一般使用BigDecimal工具类，并配合“舍入模式(Rounding mode)”和小数精度(scale)。Rounding Mode概念不好理解，也不容易讲清楚，看到这篇博客讲的非常好，转载之。 原文链接： BigDecimal 舍入模式（Rounding mode）介绍 1、RoundingMode介绍123">
+<meta name="twitter:description" content="java涉及金额计算的场景，不要使用float或double进行计算，会丢失精度。 一般使用BigDecimal工具类，并配合“舍入模式(Rounding mode)”和小数精度(scale)。Rounding Mode概念不好理解，也不容易讲清楚，看到这篇博客讲的非常好，转载之。 原文链接： BigDecimal 舍入模式（Rounding mode）介绍 RoundingMode介绍12345">
 <meta name="twitter:image" content="http://i2.bvimg.com/678568/afd0db0b01c619bbs.png">
 
 
@@ -311,11 +313,9 @@
         <p>java涉及金额计算的场景，不要使用float或double进行计算，会丢失精度。</p>
 <p>一般使用BigDecimal工具类，并配合“舍入模式(Rounding mode)”和小数精度(scale)。<br>Rounding Mode概念不好理解，也不容易讲清楚，看到这篇博客讲的非常好，转载之。</p>
 <p>原文链接： <a href="https://my.oschina.net/sunchp/blog/670909" target="_blank" rel="noopener">BigDecimal 舍入模式（Rounding mode）介绍</a></p>
-<h1 id="1、RoundingMode介绍"><a href="#1、RoundingMode介绍" class="headerlink" title="1、RoundingMode介绍"></a>1、RoundingMode介绍</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line">package java.math;</span><br><span class="line"></span><br><span class="line">public enum RoundingMode &#123;</span><br><span class="line"></span><br><span class="line">    UP(BigDecimal.ROUND_UP),</span><br><span class="line"></span><br><span class="line">    DOWN(BigDecimal.ROUND_DOWN),</span><br><span class="line"></span><br><span class="line">    CEILING(BigDecimal.ROUND_CEILING),</span><br><span class="line"></span><br><span class="line">    FLOOR(BigDecimal.ROUND_FLOOR),</span><br><span class="line"></span><br><span class="line">    HALF_UP(BigDecimal.ROUND_HALF_UP),</span><br><span class="line"></span><br><span class="line">    HALF_DOWN(BigDecimal.ROUND_HALF_DOWN),</span><br><span class="line"></span><br><span class="line">    HALF_EVEN(BigDecimal.ROUND_HALF_EVEN),</span><br><span class="line"></span><br><span class="line">    UNNECESSARY(BigDecimal.ROUND_UNNECESSARY);</span><br><span class="line"></span><br><span class="line">    final int oldMode;</span><br><span class="line"></span><br><span class="line">    private RoundingMode(int oldMode) &#123;</span><br><span class="line">        this.oldMode = oldMode;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static RoundingMode valueOf(int rm) &#123;</span><br><span class="line">        switch(rm) &#123;</span><br><span class="line"></span><br><span class="line">        case BigDecimal.ROUND_UP:</span><br><span class="line">            return UP;</span><br><span class="line"></span><br><span class="line">        case BigDecimal.ROUND_DOWN:</span><br><span class="line">            return DOWN;</span><br><span class="line"></span><br><span class="line">        case BigDecimal.ROUND_CEILING:</span><br><span class="line">            return CEILING;</span><br><span class="line"></span><br><span class="line">        case BigDecimal.ROUND_FLOOR:</span><br><span class="line">            return FLOOR;</span><br><span class="line"></span><br><span class="line">        case BigDecimal.ROUND_HALF_UP:</span><br><span class="line">            return HALF_UP;</span><br><span class="line"></span><br><span class="line">        case BigDecimal.ROUND_HALF_DOWN:</span><br><span class="line">            return HALF_DOWN;</span><br><span class="line"></span><br><span class="line">        case BigDecimal.ROUND_HALF_EVEN:</span><br><span class="line">            return HALF_EVEN;</span><br><span class="line"></span><br><span class="line">        case BigDecimal.ROUND_UNNECESSARY:</span><br><span class="line">            return UNNECESSARY;</span><br><span class="line"></span><br><span class="line">        default:</span><br><span class="line">            throw new IllegalArgumentException(&quot;argument out of range&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="RoundingMode介绍"><a href="#RoundingMode介绍" class="headerlink" title="RoundingMode介绍"></a>RoundingMode介绍</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line">package java.math;</span><br><span class="line"></span><br><span class="line">public enum RoundingMode &#123;</span><br><span class="line"></span><br><span class="line">    UP(BigDecimal.ROUND_UP),</span><br><span class="line"></span><br><span class="line">    DOWN(BigDecimal.ROUND_DOWN),</span><br><span class="line"></span><br><span class="line">    CEILING(BigDecimal.ROUND_CEILING),</span><br><span class="line"></span><br><span class="line">    FLOOR(BigDecimal.ROUND_FLOOR),</span><br><span class="line"></span><br><span class="line">    HALF_UP(BigDecimal.ROUND_HALF_UP),</span><br><span class="line"></span><br><span class="line">    HALF_DOWN(BigDecimal.ROUND_HALF_DOWN),</span><br><span class="line"></span><br><span class="line">    HALF_EVEN(BigDecimal.ROUND_HALF_EVEN),</span><br><span class="line"></span><br><span class="line">    UNNECESSARY(BigDecimal.ROUND_UNNECESSARY);</span><br><span class="line"></span><br><span class="line">    final int oldMode;</span><br><span class="line"></span><br><span class="line">    private RoundingMode(int oldMode) &#123;</span><br><span class="line">        this.oldMode = oldMode;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static RoundingMode valueOf(int rm) &#123;</span><br><span class="line">        switch(rm) &#123;</span><br><span class="line"></span><br><span class="line">        case BigDecimal.ROUND_UP:</span><br><span class="line">            return UP;</span><br><span class="line"></span><br><span class="line">        case BigDecimal.ROUND_DOWN:</span><br><span class="line">            return DOWN;</span><br><span class="line"></span><br><span class="line">        case BigDecimal.ROUND_CEILING:</span><br><span class="line">            return CEILING;</span><br><span class="line"></span><br><span class="line">        case BigDecimal.ROUND_FLOOR:</span><br><span class="line">            return FLOOR;</span><br><span class="line"></span><br><span class="line">        case BigDecimal.ROUND_HALF_UP:</span><br><span class="line">            return HALF_UP;</span><br><span class="line"></span><br><span class="line">        case BigDecimal.ROUND_HALF_DOWN:</span><br><span class="line">            return HALF_DOWN;</span><br><span class="line"></span><br><span class="line">        case BigDecimal.ROUND_HALF_EVEN:</span><br><span class="line">            return HALF_EVEN;</span><br><span class="line"></span><br><span class="line">        case BigDecimal.ROUND_UNNECESSARY:</span><br><span class="line">            return UNNECESSARY;</span><br><span class="line"></span><br><span class="line">        default:</span><br><span class="line">            throw new IllegalArgumentException(&quot;argument out of range&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>RoundingMode是一个枚举类，有以下几个值：UP，DOWN，CEILING，FLOOR，HALF_UP，HALF_DOWN，HALF_EVEN，UNNECESSARY</p>
-<p>2 舍入模式</p>
-<p>2.1 UP</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public final static int ROUND_UP = 0;</span><br></pre></td></tr></table></figure>
+<h1 id="舍入模式"><a href="#舍入模式" class="headerlink" title="舍入模式"></a>舍入模式</h1><h2 id="UP"><a href="#UP" class="headerlink" title="UP"></a>UP</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public final static int ROUND_UP = 0;</span><br></pre></td></tr></table></figure>
 <p>定义：远离零方向舍入。</p>
 <p>解释：始终对非零舍弃部分前面的数字加 1。注意，此舍入模式始终不会减少计算值的绝对值。</p>
 <p>图示：<br><img src="http://i2.bvimg.com/678568/afd0db0b01c619bbs.png" alt="Markdown"></p>
@@ -370,8 +370,7 @@
 </tr>
 </tbody>
 </table>
-<p>2.2 DOWN</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public final static int ROUND_DOWN = 1;</span><br></pre></td></tr></table></figure>
+<h2 id="DOWN"><a href="#DOWN" class="headerlink" title="DOWN"></a>DOWN</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public final static int ROUND_DOWN = 1;</span><br></pre></td></tr></table></figure>
 <p>定义：向零方向舍入。</p>
 <p>解释：从不对舍弃部分前面的数字加 1（即截尾）。注意，此舍入模式始终不会增加计算值的绝对值。</p>
 <p>图示：<br><img src="http://i2.bvimg.com/678568/1927eb3f90a8ad3as.png" alt="Markdown"></p>
@@ -426,8 +425,7 @@
 </tr>
 </tbody>
 </table>
-<p>2.3 CEILING</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public final static int ROUND_CEILING = 2;</span><br></pre></td></tr></table></figure>
+<h2 id="CEILING"><a href="#CEILING" class="headerlink" title="CEILING"></a>CEILING</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public final static int ROUND_CEILING = 2;</span><br></pre></td></tr></table></figure>
 <p>定义：向正无限大方向舍入。</p>
 <p>解释：如果结果为正，则舍入行为类似于 RoundingMode.UP；如果结果为负，则舍入行为类似于RoundingMode.DOWN。注意，此舍入模式始终不会减少计算值。</p>
 <p>图示：<br><img src="http://i2.bvimg.com/678568/834a090d6dfc1c69s.png" alt="Markdown"></p>
@@ -482,8 +480,7 @@
 </tr>
 </tbody>
 </table>
-<p>2.4 FLOOR</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public final static int ROUND_FLOOR = 3;</span><br></pre></td></tr></table></figure>
+<h2 id="FLOOR"><a href="#FLOOR" class="headerlink" title="FLOOR"></a>FLOOR</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public final static int ROUND_FLOOR = 3;</span><br></pre></td></tr></table></figure>
 <p>定义：向负无限大方向舍入。</p>
 <p>解释：如果结果为正，则舍入行为类似于 RoundingMode.DOWN；如果结果为负，则舍入行为类似于RoundingMode.UP。注意，此舍入模式始终不会增加计算值。</p>
 <p>图示：<br><img src="http://i2.bvimg.com/678568/b96799b973fefcbas.png" alt="Markdown"></p>
@@ -538,7 +535,7 @@
 </tr>
 </tbody>
 </table>
-<p>2.5 HALF_UP （Half指的中点值，例如0.5、0.05，0.15等等）</p>
+<h2 id="HALF-UP"><a href="#HALF-UP" class="headerlink" title="HALF_UP"></a>HALF_UP</h2><p>Half指的中点值，例如0.5、0.05，0.15等等</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public final static int ROUND_HALF_UP = 4;</span><br></pre></td></tr></table></figure>
 <p>定义：向最接近的数字方向舍入，如果与两个相邻数字的距离相等，则向上舍入。</p>
 <p>解释：如果被舍弃部分 &gt;= 0.5，则舍入行为同 RoundingMode.UP；否则舍入行为同RoundingMode.DOWN。注意，此舍入模式就是通常学校里讲的四舍五入。</p>
@@ -594,8 +591,7 @@
 </tr>
 </tbody>
 </table>
-<p>2.6 HALF_DOWN</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public final static int ROUND_HALF_DOWN = 5;</span><br></pre></td></tr></table></figure>
+<h2 id="HALF-DOWN"><a href="#HALF-DOWN" class="headerlink" title="HALF_DOWN"></a>HALF_DOWN</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public final static int ROUND_HALF_DOWN = 5;</span><br></pre></td></tr></table></figure>
 <p>定义：向最接近的数字方向舍入，如果与两个相邻数字的距离相等，则向下舍入。</p>
 <p>解释：如果被舍弃部分 &gt; 0.5，则舍入行为同 RoundingMode.UP；否则舍入行为同RoundingMode.DOWN。注意，此舍入模式就是通常讲的五舍六入。</p>
 <p>图示：</p>
@@ -651,16 +647,14 @@
 </tr>
 </tbody>
 </table>
-<p>2.7 HALF_EVEN</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public final static int ROUND_HALF_EVEN = 6;</span><br></pre></td></tr></table></figure>
+<h2 id="HALF-EVEN"><a href="#HALF-EVEN" class="headerlink" title="HALF_EVEN"></a>HALF_EVEN</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public final static int ROUND_HALF_EVEN = 6;</span><br></pre></td></tr></table></figure>
 <p>定义：向最接近数字方向舍入，如果与两个相邻数字的距离相等，则向相邻的偶数舍入。</p>
 <p>解释：如果舍弃部分左边的数字为奇数，则舍入行为同 RoundingMode.HALF_UP；如果为偶数，则舍入行为同RoundingMode.HALF_DOWN。注意，在重复进行一系列计算时，根据统计学，此舍入模式可以在统计上将累加错误减到最小。此舍入模式也称为“银行家舍入法”，主要在美国使用。此舍入模式类似于 Java 中对float 和double 算法使用的舍入策略。</p>
 <p>图示：</p>
 <p><img src="http://i2.bvimg.com/678568/5b77f86f501098b6s.png" alt="Markdown"></p>
 <p>示例：</p>
 <p>|输入数字|    使用 HALF_EVEN 舍入模式将输入数字舍入为一位数|<br>|5.5|    6|<br>|2.5|    2|<br>|1.6|    2|<br>|1.1|    1|<br>|1.0|    1|<br>|-1.0|    -1|<br>|-1.1|    -1|<br>|-1.6|    -2|<br>|-2.5|    -2|<br>|-5.5|    -6|</p>
-<p>2.8 UNNECESSARY</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public final static int ROUND_UNNECESSARY =  7;</span><br></pre></td></tr></table></figure>
+<h2 id="UNNECESSARY"><a href="#UNNECESSARY" class="headerlink" title="UNNECESSARY"></a>UNNECESSARY</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public final static int ROUND_UNNECESSARY =  7;</span><br></pre></td></tr></table></figure>
 <p>定义：用于断言请求的操作具有精确结果，因此不发生舍入。</p>
 <p>解释：计算结果是精确的，不需要舍入，否则抛出 ArithmeticException。</p>
 <p>示例：</p>
@@ -892,7 +886,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1、RoundingMode介绍"><span class="nav-number">1.</span> <span class="nav-text">1、RoundingMode介绍</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#RoundingMode介绍"><span class="nav-number">1.</span> <span class="nav-text">RoundingMode介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#舍入模式"><span class="nav-number">2.</span> <span class="nav-text">舍入模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#UP"><span class="nav-number">2.1.</span> <span class="nav-text">UP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DOWN"><span class="nav-number">2.2.</span> <span class="nav-text">DOWN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CEILING"><span class="nav-number">2.3.</span> <span class="nav-text">CEILING</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FLOOR"><span class="nav-number">2.4.</span> <span class="nav-text">FLOOR</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HALF-UP"><span class="nav-number">2.5.</span> <span class="nav-text">HALF_UP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HALF-DOWN"><span class="nav-number">2.6.</span> <span class="nav-text">HALF_DOWN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HALF-EVEN"><span class="nav-number">2.7.</span> <span class="nav-text">HALF_EVEN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UNNECESSARY"><span class="nav-number">2.8.</span> <span class="nav-text">UNNECESSARY</span></a></li></ol></li></ol></div>
             
 
           </div>

@@ -73,6 +73,8 @@
 
 
 
+  
+
 
   <link rel="alternate" href="/blogs/atom.xml" title="try-catch的博客" type="application/atom+xml">
 
@@ -88,17 +90,18 @@
 <meta property="og:site_name" content="try-catch的博客">
 <meta property="og:description" content="java涉及金额计算的场景，不要使用float或double进行计算，会丢失精度。 一般使用BigDecimal工具类，并配合“舍入模式(Rounding mode)”和小数精度(scale)。Rounding Mode概念不好理解，也不容易讲清楚，看到这篇博客讲的非常好，转载之。 原文链接： BigDecimal 舍入模式（Rounding mode）介绍 RoundingMode介绍12345">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://i2.bvimg.com/678568/afd0db0b01c619bbs.png">
-<meta property="og:image" content="http://i2.bvimg.com/678568/1927eb3f90a8ad3as.png">
-<meta property="og:image" content="http://i2.bvimg.com/678568/834a090d6dfc1c69s.png">
-<meta property="og:image" content="http://i2.bvimg.com/678568/b96799b973fefcbas.png">
-<meta property="og:image" content="http://i2.bvimg.com/678568/a57fb3e376c30c6es.png">
-<meta property="og:image" content="http://i2.bvimg.com/678568/5b77f86f501098b6s.png">
-<meta property="og:updated_time" content="2019-03-05T10:34:41.389Z">
+<meta property="og:image" content="https://upload.cc/i1/2019/03/05/BP5tdu.png">
+<meta property="og:image" content="https://upload.cc/i1/2019/03/05/BOZqdA.png">
+<meta property="og:image" content="https://upload.cc/i1/2019/03/05/cQqTR9.png">
+<meta property="og:image" content="https://upload.cc/i1/2019/03/05/1n7Tqt.png">
+<meta property="og:image" content="https://upload.cc/i1/2019/03/05/8Pj5z3.png">
+<meta property="og:image" content="https://upload.cc/i1/2019/03/05/V0Lomu.png">
+<meta property="og:image" content="https://upload.cc/i1/2019/03/05/6fwBlS.png">
+<meta property="og:updated_time" content="2019-03-05T11:42:29.833Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="BigDecimal工具类之RoundMode">
 <meta name="twitter:description" content="java涉及金额计算的场景，不要使用float或double进行计算，会丢失精度。 一般使用BigDecimal工具类，并配合“舍入模式(Rounding mode)”和小数精度(scale)。Rounding Mode概念不好理解，也不容易讲清楚，看到这篇博客讲的非常好，转载之。 原文链接： BigDecimal 舍入模式（Rounding mode）介绍 RoundingMode介绍12345">
-<meta name="twitter:image" content="http://i2.bvimg.com/678568/afd0db0b01c619bbs.png">
+<meta name="twitter:image" content="https://upload.cc/i1/2019/03/05/BP5tdu.png">
 
 
 
@@ -326,7 +329,7 @@
 <h1 id="舍入模式"><a href="#舍入模式" class="headerlink" title="舍入模式"></a>舍入模式</h1><h2 id="UP"><a href="#UP" class="headerlink" title="UP"></a>UP</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public final static int ROUND_UP = 0;</span><br></pre></td></tr></table></figure>
 <p>定义：远离零方向舍入。</p>
 <p>解释：始终对非零舍弃部分前面的数字加 1。注意，此舍入模式始终不会减少计算值的绝对值。</p>
-<p>图示：<br><img src="http://i2.bvimg.com/678568/afd0db0b01c619bbs.png" alt="Markdown"></p>
+<p>图示：<br><img src="https://upload.cc/i1/2019/03/05/BP5tdu.png" alt="Markdown"></p>
 <p>示例：</p>
 <table>
 <thead>
@@ -381,7 +384,7 @@
 <h2 id="DOWN"><a href="#DOWN" class="headerlink" title="DOWN"></a>DOWN</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public final static int ROUND_DOWN = 1;</span><br></pre></td></tr></table></figure>
 <p>定义：向零方向舍入。</p>
 <p>解释：从不对舍弃部分前面的数字加 1（即截尾）。注意，此舍入模式始终不会增加计算值的绝对值。</p>
-<p>图示：<br><img src="http://i2.bvimg.com/678568/1927eb3f90a8ad3as.png" alt="Markdown"></p>
+<p>图示：<br><img src="https://upload.cc/i1/2019/03/05/BOZqdA.png" alt="Markdown"></p>
 <p>示例：</p>
 <table>
 <thead>
@@ -436,7 +439,7 @@
 <h2 id="CEILING"><a href="#CEILING" class="headerlink" title="CEILING"></a>CEILING</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public final static int ROUND_CEILING = 2;</span><br></pre></td></tr></table></figure>
 <p>定义：向正无限大方向舍入。</p>
 <p>解释：如果结果为正，则舍入行为类似于 RoundingMode.UP；如果结果为负，则舍入行为类似于RoundingMode.DOWN。注意，此舍入模式始终不会减少计算值。</p>
-<p>图示：<br><img src="http://i2.bvimg.com/678568/834a090d6dfc1c69s.png" alt="Markdown"></p>
+<p>图示：<br><img src="https://upload.cc/i1/2019/03/05/cQqTR9.png" alt="Markdown"></p>
 <p>示例：</p>
 <table>
 <thead>
@@ -491,7 +494,7 @@
 <h2 id="FLOOR"><a href="#FLOOR" class="headerlink" title="FLOOR"></a>FLOOR</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public final static int ROUND_FLOOR = 3;</span><br></pre></td></tr></table></figure>
 <p>定义：向负无限大方向舍入。</p>
 <p>解释：如果结果为正，则舍入行为类似于 RoundingMode.DOWN；如果结果为负，则舍入行为类似于RoundingMode.UP。注意，此舍入模式始终不会增加计算值。</p>
-<p>图示：<br><img src="http://i2.bvimg.com/678568/b96799b973fefcbas.png" alt="Markdown"></p>
+<p>图示：<br><img src="https://upload.cc/i1/2019/03/05/1n7Tqt.png" alt="Markdown"></p>
 <p>示例：</p>
 <table>
 <thead>
@@ -547,7 +550,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public final static int ROUND_HALF_UP = 4;</span><br></pre></td></tr></table></figure>
 <p>定义：向最接近的数字方向舍入，如果与两个相邻数字的距离相等，则向上舍入。</p>
 <p>解释：如果被舍弃部分 &gt;= 0.5，则舍入行为同 RoundingMode.UP；否则舍入行为同RoundingMode.DOWN。注意，此舍入模式就是通常学校里讲的四舍五入。</p>
-<p>图示：</p>
+<p>图示：<br><img src="https://upload.cc/i1/2019/03/05/8Pj5z3.png" alt="此处输入图片的描述"></p>
 <p>示例：</p>
 <table>
 <thead>
@@ -603,7 +606,7 @@
 <p>定义：向最接近的数字方向舍入，如果与两个相邻数字的距离相等，则向下舍入。</p>
 <p>解释：如果被舍弃部分 &gt; 0.5，则舍入行为同 RoundingMode.UP；否则舍入行为同RoundingMode.DOWN。注意，此舍入模式就是通常讲的五舍六入。</p>
 <p>图示：</p>
-<p><img src="http://i2.bvimg.com/678568/a57fb3e376c30c6es.png" alt="Markdown"></p>
+<p><img src="https://upload.cc/i1/2019/03/05/V0Lomu.png" alt="Markdown"></p>
 <p>示例：</p>
 <table>
 <thead>
@@ -659,7 +662,7 @@
 <p>定义：向最接近数字方向舍入，如果与两个相邻数字的距离相等，则向相邻的偶数舍入。</p>
 <p>解释：如果舍弃部分左边的数字为奇数，则舍入行为同 RoundingMode.HALF_UP；如果为偶数，则舍入行为同RoundingMode.HALF_DOWN。注意，在重复进行一系列计算时，根据统计学，此舍入模式可以在统计上将累加错误减到最小。此舍入模式也称为“银行家舍入法”，主要在美国使用。此舍入模式类似于 Java 中对float 和double 算法使用的舍入策略。</p>
 <p>图示：</p>
-<p><img src="http://i2.bvimg.com/678568/5b77f86f501098b6s.png" alt="Markdown"></p>
+<p><img src="https://upload.cc/i1/2019/03/05/6fwBlS.png" alt="Markdown"></p>
 <p>示例：</p>
 <p>|输入数字|    使用 HALF_EVEN 舍入模式将输入数字舍入为一位数|<br>|5.5|    6|<br>|2.5|    2|<br>|1.6|    2|<br>|1.1|    1|<br>|1.0|    1|<br>|-1.0|    -1|<br>|-1.1|    -1|<br>|-1.6|    -2|<br>|-2.5|    -2|<br>|-5.5|    -6|</p>
 <h2 id="UNNECESSARY"><a href="#UNNECESSARY" class="headerlink" title="UNNECESSARY"></a>UNNECESSARY</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public final static int ROUND_UNNECESSARY =  7;</span><br></pre></td></tr></table></figure>

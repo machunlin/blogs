@@ -88,28 +88,28 @@
 <meta property="og:site_name" content="try-catch的博客">
 <meta property="og:description" content="今天我们来聊下生产环境排查、定位问题的工具和方法。 常用命令jdk提供的工具类，可以用来获取java进程的内存、线程、垃圾回收等信息。  jstack —— 获取线程堆栈信息：jstack -l  7055 &amp;gt; store-back.jstatck  jmap —— 获取堆中的对象信息（类的实例等）jmap -dump:format=b,file=store-back.hprof 12131">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://i1.bvimg.com/678568/54e79a8618a0ed0c.png">
-<meta property="og:image" content="http://i1.bvimg.com/678568/e43f21181a5ea408.png">
-<meta property="og:image" content="http://i1.bvimg.com/678568/cbc9e7368a6233f5.png">
-<meta property="og:image" content="http://i1.bvimg.com/678568/ff77eae2abd504e1.png">
-<meta property="og:image" content="http://i1.bvimg.com/678568/31e259c8c73b2347.png">
-<meta property="og:image" content="http://i1.bvimg.com/678568/531cda4f73c27b8c.png">
-<meta property="og:image" content="http://i1.bvimg.com/678568/c5901def398c8b84.png">
-<meta property="og:image" content="http://i1.bvimg.com/678568/5d48db24cab54d33.png">
-<meta property="og:image" content="http://i1.bvimg.com/678568/3c800cf00544e0e1.png">
-<meta property="og:image" content="http://i1.bvimg.com/678568/25732ba0671a9b9d.png">
-<meta property="og:image" content="http://i1.bvimg.com/678568/b00233136dcff57b.png">
-<meta property="og:image" content="http://i1.bvimg.com/678568/279444f984a6fc07.png">
-<meta property="og:image" content="http://i1.bvimg.com/678568/c51f294ff3a1d7ec.png">
-<meta property="og:image" content="http://i1.bvimg.com/678568/f47b5fd8b3b0a472.png">
-<meta property="og:image" content="http://i1.bvimg.com/678568/0a0565e2d34f7373.png">
-<meta property="og:image" content="http://i1.bvimg.com/678568/03f0ebe813b558ff.png">
-<meta property="og:image" content="http://i1.bvimg.com/678568/ac7df0cfba6c10b0.png">
-<meta property="og:updated_time" content="2019-03-05T09:14:26.009Z">
+<meta property="og:image" content="https://i.loli.net/2019/03/15/5c8b547fcf89d.png">
+<meta property="og:image" content="https://i.loli.net/2019/03/15/5c8b547c6d277.png">
+<meta property="og:image" content="https://i.loli.net/2019/03/15/5c8b547f348e9.png">
+<meta property="og:image" content="https://i.loli.net/2019/03/15/5c8b547f13e68.png">
+<meta property="og:image" content="https://i.loli.net/2019/03/15/5c8b547d365a0.png">
+<meta property="og:image" content="https://i.loli.net/2019/03/15/5c8b548285d44.png">
+<meta property="og:image" content="https://i.loli.net/2019/03/15/5c8b54829cc78.png">
+<meta property="og:image" content="https://i.loli.net/2019/03/15/5c8b68b66c0e8.png">
+<meta property="og:image" content="https://i.loli.net/2019/03/15/5c8b68b55e3c2.png">
+<meta property="og:image" content="https://i.loli.net/2019/03/15/5c8b68b55c4a7.png">
+<meta property="og:image" content="https://i.loli.net/2019/03/15/5c8b68b506c60.png">
+<meta property="og:image" content="https://i.loli.net/2019/03/15/5c8b68b3ed026.png">
+<meta property="og:image" content="https://i.loli.net/2019/03/15/5c8b68b4b46ca.png">
+<meta property="og:image" content="https://i.loli.net/2019/03/15/5c8b68b49fefe.png">
+<meta property="og:image" content="https://i.loli.net/2019/03/15/5c8b68b4b02ee.png">
+<meta property="og:image" content="https://i.loli.net/2019/03/15/5c8b68b4d62a4.png">
+<meta property="og:image" content="https://i.loli.net/2019/03/15/5c8b68b44bb7d.png">
+<meta property="og:updated_time" content="2019-03-15T09:30:16.638Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java性能分析与问题定位">
 <meta name="twitter:description" content="今天我们来聊下生产环境排查、定位问题的工具和方法。 常用命令jdk提供的工具类，可以用来获取java进程的内存、线程、垃圾回收等信息。  jstack —— 获取线程堆栈信息：jstack -l  7055 &amp;gt; store-back.jstatck  jmap —— 获取堆中的对象信息（类的实例等）jmap -dump:format=b,file=store-back.hprof 12131">
-<meta name="twitter:image" content="http://i1.bvimg.com/678568/54e79a8618a0ed0c.png">
+<meta name="twitter:image" content="https://i.loli.net/2019/03/15/5c8b547fcf89d.png">
 
 
 
@@ -343,56 +343,56 @@
 </ul>
 <h1 id="APM监控工具"><a href="#APM监控工具" class="headerlink" title="APM监控工具"></a>APM监控工具</h1><p>  通常，排查生产环境的问题，我们不会远程连到服务器，使用jstack、jmap命令获取相关信息，因为这样效率太低，而且生产环境有诸多限制。<br>  我比较习惯使用APM(Application Performance Monitor)工具来快速定位和排查问题，比如<a href="https://github.com/naver/pinpoint" target="_blank" rel="noopener">pinpoint</a>就是一款非常优秀的APM工具。</p>
 <ul>
-<li><p>在pinpoint首页，我们可以看到应用程序之间的拓扑图，调用次数(一般生产环境采样率为10%)，如下图。<br><img src="http://i1.bvimg.com/678568/54e79a8618a0ed0c.png" alt="pinpoint首页"></p>
+<li><p>在pinpoint首页，我们可以看到应用程序之间的拓扑图，调用次数(一般生产环境采样率为10%)，如下图。<br><img src="https://i.loli.net/2019/03/15/5c8b547fcf89d.png" alt="pinpoint首页"></p>
 </li>
-<li><p>图片右上角部分（如下图），有很多绿色的小点点，每个点代表一次http请求，横坐标为请求时间，纵坐标为该次请求的耗时（毫秒）；红色的点表示该次请求抛异常。<br><img src="http://i1.bvimg.com/678568/e43f21181a5ea408.png" alt="请求"></p>
+<li><p>图片右上角部分（如下图），有很多绿色的小点点，每个点代表一次http请求，横坐标为请求时间，纵坐标为该次请求的耗时（毫秒）；红色的点表示该次请求抛异常。<br><img src="https://i.loli.net/2019/03/15/5c8b547c6d277.png" alt="请求"></p>
 </li>
-<li><p>我们可以用鼠标框住耗时最长的一部分“小点”，就可以查看每个请求的调用链(如下图)，调用链精确到某个应用的某个类的某个方法，并打印出执行的SQL语句；以及每个方法的执行耗时和百分比。<br><img src="http://i1.bvimg.com/678568/cbc9e7368a6233f5.png" alt="调用链"></p>
+<li><p>我们可以用鼠标框住耗时最长的一部分“小点”，就可以查看每个请求的调用链(如下图)，调用链精确到某个应用的某个类的某个方法，并打印出执行的SQL语句；以及每个方法的执行耗时和百分比。<br><img src="https://i.loli.net/2019/03/15/5c8b547f348e9.png" alt="调用链"></p>
 </li>
-<li><p>点击“inspector”按钮，可以看到每个应用(jvm进程)的内存分配情况，比如堆、永久区(java8为metaspace)占用空间，GC执行耗时，CPU消耗，每秒事务数(TPS)，活跃线程数，请求响应时间，堆外直接内存空间等等数据。一目了然，犹如上帝视角。<br><img src="http://i1.bvimg.com/678568/ff77eae2abd504e1.png" alt="此处输入图片的描述"></p>
+<li><p>点击“inspector”按钮，可以看到每个应用(jvm进程)的内存分配情况，比如堆、永久区(java8为metaspace)占用空间，GC执行耗时，CPU消耗，每秒事务数(TPS)，活跃线程数，请求响应时间，堆外直接内存空间等等数据。一目了然，犹如上帝视角。<br><img src="https://i.loli.net/2019/03/15/5c8b547f13e68.png" alt="此处输入图片的描述"></p>
 </li>
 </ul>
 <h1 id="eclipseMAT内存分析工具"><a href="#eclipseMAT内存分析工具" class="headerlink" title="eclipseMAT内存分析工具"></a>eclipseMAT内存分析工具</h1><p>还记得第一步“常用工具”中的两个命令吧：<br><code>jmap -dump:format=b,file=store-back.hprof 12131</code><br><code>-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=${目录}</code><br>eclipseMAT就是用来分析dump下来的内存文件的。</p>
 <ul>
-<li><p>用MAT生成内存泄漏分析报告,如下图：<br><img src="http://i1.bvimg.com/678568/31e259c8c73b2347.png" alt="内存泄漏报告"></p>
+<li><p>用MAT生成内存泄漏分析报告,如下图：<br><img src="https://i.loli.net/2019/03/15/5c8b547d365a0.png" alt="内存泄漏报告"></p>
 </li>
-<li><p>通过直方图(Histogram)和支配树(Dorminator Tree)分析内存泄漏：<br><img src="http://i1.bvimg.com/678568/531cda4f73c27b8c.png" alt="直方图支配树"></p>
+<li><p>通过直方图(Histogram)和支配树(Dorminator Tree)分析内存泄漏：<br><img src="https://i.loli.net/2019/03/15/5c8b548285d44.png" alt="直方图支配树"></p>
 </li>
 </ul>
-<h2 id="决策树"><a href="#决策树" class="headerlink" title="决策树"></a>决策树</h2><p> 首先，我们通过决策树(Dorminator Tree)来分析，按package分组：<br><img src="http://i1.bvimg.com/678568/c5901def398c8b84.png" alt="支配树"></p>
+<h2 id="决策树"><a href="#决策树" class="headerlink" title="决策树"></a>决策树</h2><p> 首先，我们通过决策树(Dorminator Tree)来分析，按package分组：<br><img src="https://i.loli.net/2019/03/15/5c8b54829cc78.png" alt="支配树"></p>
 <ul>
 <li>找到占用内存最大的类，如下图。</li>
 </ul>
 <p>浅堆(shallow heap) : 指某一个对象本身所占内存大小（也包括外部对象的”引用”，每个外部对象的”引用”为4或8个字节，分析时一般都是忽略这部分）。</p>
 <p>保留堆(retained heap): 指对象本身和引用的“外部对象”的内存大小，但不包括“共享对象”(共享对象的概念后面会讲到)。</p>
 <p>深堆(deep heap): 指对象本身和引用的“外部对象”的内存大小。</p>
-<p>MAT只显示浅堆和保留堆的大小，很明显，浅堆和保留堆所占空间差距过大，就非常有可能是“内存泄漏”了。<br><img src="http://i1.bvimg.com/678568/5d48db24cab54d33.png" alt="支配树分组"></p>
+<p>MAT只显示浅堆和保留堆的大小，很明显，浅堆和保留堆所占空间差距过大，就非常有可能是“内存泄漏”了。<br><img src="https://i.loli.net/2019/03/15/5c8b68b66c0e8.png" alt="支配树分组"></p>
 <ul>
-<li><p>在这里，我们怀疑Activity对象可能泄漏内存，于是查下引用此对象的是谁(with incoming references)。<br><img src="http://i1.bvimg.com/678568/3c800cf00544e0e1.png" alt="incoming"></p>
+<li><p>在这里，我们怀疑Activity对象可能泄漏内存，于是查下引用此对象的是谁(with incoming references)。<br><img src="https://i.loli.net/2019/03/15/5c8b68b55e3c2.png" alt="incoming"></p>
 </li>
-<li><p>我们大概看一眼，就会发现，主要是WebAppClassLoader持有大量Activity对象的引用。<br><img src="http://i1.bvimg.com/678568/25732ba0671a9b9d.png" alt="activity对象的引用者"></p>
+<li><p>我们大概看一眼，就会发现，主要是WebAppClassLoader持有大量Activity对象的引用。<br><img src="https://i.loli.net/2019/03/15/5c8b68b55c4a7.png" alt="activity对象的引用者"></p>
 </li>
 <li><p>使用合并最短根路径(GC ROOTS)方式，检查对象的引用路径,如下图。</p>
 </li>
 </ul>
 <p>Merge Shortest Path To GC Roots：<br>快速分析的一个常用功能，它能够从当前内存映像中找到一条指定对象所在的到GC Root的最短路径。</p>
-<p>需要排除弱引用、软引用及影子引用等，一般来说这三种类型的引用都不会是造成内存泄漏的原因，<br>因为JVM迟早是会回收只存在这三种引用的资源的。<br><img src="http://i1.bvimg.com/678568/b00233136dcff57b.png" alt="gcroots"></p>
+<p>需要排除弱引用、软引用及影子引用等，一般来说这三种类型的引用都不会是造成内存泄漏的原因，<br>因为JVM迟早是会回收只存在这三种引用的资源的。<br><img src="https://i.loli.net/2019/03/15/5c8b68b506c60.png" alt="gcroots"></p>
 <ul>
-<li>再次确认，要是WebAppClassLoader持有大量Activity对象的引用。<br>我们通过决策树的方式分析，大概可以判断Activity对象是内存泄漏的最大嫌疑人。<br><img src="http://i1.bvimg.com/678568/279444f984a6fc07.png" alt="activity"></li>
+<li>再次确认，要是WebAppClassLoader持有大量Activity对象的引用。<br>我们通过决策树的方式分析，大概可以判断Activity对象是内存泄漏的最大嫌疑人。<br><img src="https://i.loli.net/2019/03/15/5c8b68b3ed026.png" alt="activity"></li>
 </ul>
 <h2 id="直方图"><a href="#直方图" class="headerlink" title="直方图"></a>直方图</h2><p>下面我们再通过直方图的方式分析。</p>
-<p>直方图首页，依然通过浅堆和保留堆来分析，发现FindShoppingCartByType对象可能导致内存泄漏。<br><img src="http://i1.bvimg.com/678568/c51f294ff3a1d7ec.png" alt="直方图首页"></p>
+<p>直方图首页，依然通过浅堆和保留堆来分析，发现FindShoppingCartByType对象可能导致内存泄漏。<br><img src="https://i.loli.net/2019/03/15/5c8b68b4b46ca.png" alt="直方图首页"></p>
 <ul>
-<li><p>查看引用人是谁(with incoming references)<br><img src="http://i1.bvimg.com/678568/f47b5fd8b3b0a472.png" alt="直方图引用人"></p>
+<li><p>查看引用人是谁(with incoming references)<br><img src="https://i.loli.net/2019/03/15/5c8b68b49fefe.png" alt="直方图引用人"></p>
 </li>
-<li><p>咦，又看到熟悉的人了，Activity……<br><img src="http://i1.bvimg.com/678568/0a0565e2d34f7373.png" alt="incoming"></p>
+<li><p>咦，又看到熟悉的人了，Activity……<br><img src="https://i.loli.net/2019/03/15/5c8b68b4b02ee.png" alt="incoming"></p>
 </li>
-<li><p>依然使用合并最短根路径(GC ROOTS)方式，检查对象的引用路径,如下图。<br><img src="http://i1.bvimg.com/678568/03f0ebe813b558ff.png" alt="gcroots"></p>
+<li><p>依然使用合并最短根路径(GC ROOTS)方式，检查对象的引用路径,如下图。<br><img src="https://i.loli.net/2019/03/15/5c8b68b4d62a4.png" alt="gcroots"></p>
 </li>
 <li><p>根据下图，得出结论：<br>主要是WebAppClassLoader持有大量Activity对象的引用；<br>Activity对象持有大量FindShoppingCartByType对象的引用。</p>
 </li>
 </ul>
-<p><img src="http://i1.bvimg.com/678568/ac7df0cfba6c10b0.png" alt="gcroots"></p>
+<p><img src="https://i.loli.net/2019/03/15/5c8b68b44bb7d.png" alt="gcroots"></p>
 <p>因为本例的程序是部署在tomcat中，这就相当于是Activity对象常驻内存，无法在GC时释放。<br>通过阅读代码，发现Activity对象是使用static声明的变量，符合我们的推断。至此，内存泄漏问题定位到了原因，后面就是改代码啦。</p>
 
       

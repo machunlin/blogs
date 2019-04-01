@@ -95,7 +95,7 @@
 <meta property="og:image" content="https://upload.cc/i1/2019/03/05/8Pj5z3.png">
 <meta property="og:image" content="https://upload.cc/i1/2019/03/05/V0Lomu.png">
 <meta property="og:image" content="https://upload.cc/i1/2019/03/05/6fwBlS.png">
-<meta property="og:updated_time" content="2019-03-05T11:42:29.833Z">
+<meta property="og:updated_time" content="2019-04-01T01:36:37.809Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="BigDecimal工具类之RoundMode">
 <meta name="twitter:description" content="java涉及金额计算的场景，不要使用float或double进行计算，会丢失精度。 一般使用BigDecimal工具类，并配合“舍入模式(Rounding mode)”和小数精度(scale)。Rounding Mode概念不好理解，也不容易讲清楚，看到这篇博客讲的非常好，转载之。 原文链接： BigDecimal 舍入模式（Rounding mode）介绍 RoundingMode介绍12345">
@@ -662,7 +662,56 @@
 <p>图示：</p>
 <p><img src="https://upload.cc/i1/2019/03/05/6fwBlS.png" alt="Markdown"></p>
 <p>示例：</p>
-<p>|输入数字|    使用 HALF_EVEN 舍入模式将输入数字舍入为一位数|<br>|5.5|    6|<br>|2.5|    2|<br>|1.6|    2|<br>|1.1|    1|<br>|1.0|    1|<br>|-1.0|    -1|<br>|-1.1|    -1|<br>|-1.6|    -2|<br>|-2.5|    -2|<br>|-5.5|    -6|</p>
+<table>
+<thead>
+<tr>
+<th>输入数字</th>
+<th>使用 HALF_EVEN 舍入模式将输入数字舍入为一位数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5.5</td>
+<td>6</td>
+</tr>
+<tr>
+<td>2.5</td>
+<td>2</td>
+</tr>
+<tr>
+<td>1.6</td>
+<td>2</td>
+</tr>
+<tr>
+<td>1.1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1.0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>-1.0</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>-1.1</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>-1.6</td>
+<td>-2</td>
+</tr>
+<tr>
+<td>-2.5</td>
+<td>-2</td>
+</tr>
+<tr>
+<td>-5.5</td>
+<td>-6</td>
+</tr>
+</tbody>
+</table>
 <h2 id="UNNECESSARY"><a href="#UNNECESSARY" class="headerlink" title="UNNECESSARY"></a>UNNECESSARY</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public final static int ROUND_UNNECESSARY =  7;</span><br></pre></td></tr></table></figure>
 <p>定义：用于断言请求的操作具有精确结果，因此不发生舍入。</p>
 <p>解释：计算结果是精确的，不需要舍入，否则抛出 ArithmeticException。</p>

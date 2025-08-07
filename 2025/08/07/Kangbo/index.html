@@ -1,40 +1,3 @@
-Last login: Wed Aug  6 16:58:02 on ttys000
-mhjz@MHJZdeMacBook-Pro ~ % vim release-v8.html
-mhjz@MHJZdeMacBook-Pro ~ % ls
-app                  Documents            Library              nacos                release-v8.html
-Applications         Downloads            log                  Pictures             Sunlogin
-bin                  gem_list.txt         logs                 Postman              Sunlogin Files
-data                 JDD                  Movies               protocol_config.conf WeDrive
-Desktop              JDD技术文档          Music                Public               workspace
-mhjz@MHJZdeMacBook-Pro ~ % ls
-app                  Documents            Library              nacos                release-v8.html
-Applications         Downloads            log                  Pictures             Sunlogin
-bin                  gem_list.txt         logs                 Postman              Sunlogin Files
-data                 JDD                  Movies               protocol_config.conf WeDrive
-Desktop              JDD技术文档          Music                Public               workspace
-mhjz@MHJZdeMacBook-Pro ~ % pwd                                    
-/Users/mhjz
-mhjz@MHJZdeMacBook-Pro ~ % cd /Users/mhjz/Documents/kangbo-release              
-mhjz@MHJZdeMacBook-Pro kangbo-release % ls
-event-data.json release-v2.html release-v4.html release-v6.html
-kb-re-v18.html  release-v3.html release-v5.html release-v7.html
-mhjz@MHJZdeMacBook-Pro kangbo-release % mv release-v7.html release-v8.html
-mhjz@MHJZdeMacBook-Pro kangbo-release % ls
-event-data.json release-v2.html release-v4.html release-v6.html
-kb-re-v18.html  release-v3.html release-v5.html release-v8.html
-mhjz@MHJZdeMacBook-Pro kangbo-release % echo ''> release-v8.html
-mhjz@MHJZdeMacBook-Pro kangbo-release % vim release-v8.html
-mhjz@MHJZdeMacBook-Pro kangbo-release % ls
-event-data.json release-v2.html release-v4.html release-v6.html
-kb-re-v18.html  release-v3.html release-v5.html release-v8.html
-mhjz@MHJZdeMacBook-Pro kangbo-release % mv release-v8.html release-v7.html
-mhjz@MHJZdeMacBook-Pro kangbo-release % ls
-event-data.json release-v2.html release-v4.html release-v6.html
-kb-re-v18.html  release-v3.html release-v5.html release-v7.html
-mhjz@MHJZdeMacBook-Pro kangbo-release % 
-mhjz@MHJZdeMacBook-Pro kangbo-release % 
-mhjz@MHJZdeMacBook-Pro kangbo-release % cat release-v6.html > release-v7.html  
-mhjz@MHJZdeMacBook-Pro kangbo-release % cat release-v7.html                  
 <!DOCTYPE html>
 <html lang="zh">
 <head>
@@ -43,7 +6,7 @@ mhjz@MHJZdeMacBook-Pro kangbo-release % cat release-v7.html
 <script src="https://d3js.org/d3.v7.min.js"></script>
 <style>
   body { font-family: "Microsoft YaHei", sans-serif; background: #f8f8f8; margin:0; padding:0;}
-  #chart { background: white; margin: 10px auto; width: 98vw; height: 1300px; position: relative;}
+  #chart { background: white; margin: 10px auto; width: 98vw; height: 1400px; position: relative;}
   svg { display: block; margin: auto; background: white; box-shadow: 0 0 5px rgba(0,0,0,0.1);}
   .tooltip {
     position: absolute; background: rgba(0,0,0,0.9); color: white;
@@ -113,10 +76,19 @@ mhjz@MHJZdeMacBook-Pro kangbo-release % cat release-v7.html
   .scientist-star {
     opacity: 0.9;
   }
+  .industrial-line {
+    stroke: blue;
+    stroke-dasharray: 4,4;
+    opacity: 0.7;
+    stroke-width: 2;
+  }
+  .industrial-bg {
+    opacity: 0.1;
+  }
 </style>
 </head>
 <body>
-<h2>康波周期 + 全球霸权更替 + 工业革命 + 科学家全景图（1400–2025）<br>《文明之光》历史事件增强版 v5</h2>
+<h2>康波周期 + 全球霸权更替 + 工业革命 + 科学家全景图（1400–2025）<br>《文明之光》历史事件增强版 v6</h2>
 <div class="legend" id="legend">
   <div class="legend-item legend-nations major" data-type="nation" data-key="major">
     <div class="legend-color" style="background:#5555cc; border-width: 2px;"></div>主导霸权国家
@@ -155,7 +127,7 @@ mhjz@MHJZdeMacBook-Pro kangbo-release % cat release-v7.html
 (function(){
   const margin = {top: 120, right: 100, bottom: 80, left: 90};
   const width = window.innerWidth*0.98 - margin.left - margin.right;
-  const height = 1300 - margin.top - margin.bottom;
+  const height = 1400 - margin.top - margin.bottom;
   const svg = d3.select("#chart").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
@@ -188,82 +160,93 @@ mhjz@MHJZdeMacBook-Pro kangbo-release % cat release-v7.html
   });
   
   // 绘制康波周期曲线
-  svg.append("path")
+  const wavePath = svg.append("path")
     .datum(waveData)
     .attr("class", "kondratiev-wave")
     .attr("stroke", "teal")
     .attr("d", d3.line()
       .x(d=>xScale(d.year))
       .y(d=>yScale(d.value))
-    );
+    )
+    .on("mouseover", (event)=>{
+      tooltip.style("opacity", 1).html(`
+        <strong>康波周期曲线</strong><br>
+        长期经济周期理论，约40-60年为一个周期<br>
+        包含技术创新、经济扩张和衰退阶段
+      `)
+        .style("left", (event.pageX + 15) + "px").style("top", (event.pageY - 48) + "px");
+    })
+    .on("mouseout", ()=>tooltip.style("opacity", 0));
 
-  // 添加康波周期标签
-  svg.append("text")
-    .attr("x", xScale(1810))
-    .attr("y", yScale(1.5) - 10)
-    .attr("text-anchor", "middle")
-    .attr("font-weight", "bold")
-    .attr("fill", "teal")
-    .text("康波周期曲线");
-
-  // 为每个康波周期添加详细标签
+  // 为每个康波周期添加标签和交互
   kondratievWaves.forEach((wave, i) => {
     const midX = xScale((wave.start + wave.end)/2);
     const yPos = yScale(1.5 + Math.sin(i * 0.5) * 0.3);
     
-    svg.append("text")
+    const waveGroup = svg.append("g")
+      .attr("class", "wave-group")
+      .attr("cursor", "pointer");
+    
+    waveGroup.append("text")
       .attr("x", midX)
       .attr("y", yPos)
       .attr("class", "wave-label")
       .attr("text-anchor", "middle")
       .attr("fill", "teal")
-      .text(wave.label);
-    
-    svg.append("text")
-      .attr("x", midX)
-      .attr("y", yPos + 18)
-      .attr("class", "industrial-detail")
-      .attr("text-anchor", "middle")
-      .attr("fill", "teal")
-      .text(wave.detail);
+      .text(wave.label)
+      .on("mouseover", (event)=>{
+        tooltip.style("opacity", 1).html(`
+          <strong>${wave.label}</strong><br>
+          时间: ${wave.start}-${wave.end}<br>
+          ${wave.detail}
+        `)
+          .style("left", (event.pageX + 15) + "px").style("top", (event.pageY - 48) + "px");
+      })
+      .on("mouseout", ()=>tooltip.style("opacity", 0));
   });
 
   // 工业革命阶段（优化显示）
   const industrialRevolutions = [
-    {start:1760,end:1840,label:"第一次工业革命",detail:"蒸汽机/纺织机械化"},
-    {start:1870,end:1914,label:"第二次工业革命",detail:"电力/内燃机/大规模生产"},
-    {start:1945,end:1990,label:"第三次工业革命",detail:"计算机/自动化/核能"},
-    {start:1990,end:2025,label:"第四次工业革命",detail:"数字技术/互联网/人工智能"}
+    {start:1760,end:1840,label:"第一次工业革命",detail:"蒸汽机/纺织机械化",yPos:60,color:"rgba(0,0,255,0.1)"},
+    {start:1870,end:1914,label:"第二次工业革命",detail:"电力/内燃机/大规模生产",yPos:90,color:"rgba(0,100,255,0.1)"},
+    {start:1945,end:1990,label:"第三次工业革命",detail:"计算机/自动化/核能",yPos:120,color:"rgba(0,150,255,0.1)"},
+    {start:1990,end:2025,label:"第四次工业革命",detail:"数字技术/互联网/人工智能",yPos:150,color:"rgba(0,200,255,0.1)"}
   ];
   
+  // 绘制工业革命背景区域
+  industrialRevolutions.forEach((rev) => {
+    svg.append("rect")
+      .attr("class", "industrial-bg")
+      .attr("x", xScale(rev.start))
+      .attr("y", 0)
+      .attr("width", xScale(rev.end)-xScale(rev.start))
+      .attr("height", height)
+      .attr("fill", rev.color);
+  });
+  
   // 绘制工业革命区域和标签
-  industrialRevolutions.forEach((rev, i) => {
+  industrialRevolutions.forEach((rev) => {
     const midX = xScale((rev.start + rev.end)/2);
-    const yPos = 60 + i * 30;
     
-    // 绘制边界线
+    // 绘制边界线（更明显的竖线）
     svg.append("line")
+      .attr("class", "industrial-line")
       .attr("x1", xScale(rev.start))
       .attr("y1", 0)
       .attr("x2", xScale(rev.start))
-      .attr("y2", height)
-      .attr("stroke", "blue")
-      .attr("stroke-dasharray", "4,4")
-      .attr("opacity", 0.7);
+      .attr("y2", height);
     
     svg.append("line")
+      .attr("class", "industrial-line")
       .attr("x1", xScale(rev.end))
       .attr("y1", 0)
       .attr("x2", xScale(rev.end))
-      .attr("y2", height)
-      .attr("stroke", "blue")
-      .attr("stroke-dasharray", "4,4")
-      .attr("opacity", 0.7);
+      .attr("y2", height);
     
     // 添加主标签
     svg.append("text")
       .attr("x", midX)
-      .attr("y", yPos)
+      .attr("y", rev.yPos)
       .attr("class", "industrial-label")
       .attr("fill", "blue")
       .text(`${rev.label} (${rev.start}-${rev.end})`);
@@ -271,15 +254,16 @@ mhjz@MHJZdeMacBook-Pro kangbo-release % cat release-v7.html
     // 添加详细说明
     svg.append("text")
       .attr("x", midX)
-      .attr("y", yPos + 18)
+      .attr("y", rev.yPos + 18)
       .attr("class", "industrial-detail")
       .attr("fill", "blue")
       .text(rev.detail);
   });
 
-  // 精确调整的古代文明数据
+  // 精确调整的古代文明数据（添加清朝）
   const ancientCivilizations = [
     {name:"明朝",startYear:1368,peakYear:1420,endYear:1644,color:"#aa66aa",yBase:9.5,major:true},
+    {name:"清朝",startYear:1636,peakYear:1760,endYear:1912,color:"#cc6666",yBase:9.2,major:true},
     {name:"奥斯曼帝国",startYear:1299,peakYear:1550,endYear:1922,color:"#8a4c8a",yBase:9,major:false},
     {name:"西班牙帝国",startYear:1469,peakYear:1580,endYear:1715,color:"#996633",yBase:8.5,major:true},
     {name:"莫卧儿帝国",startYear:1526,peakYear:1650,endYear:1857,color:"#aa88aa",yBase:8,major:false}
@@ -317,10 +301,11 @@ mhjz@MHJZdeMacBook-Pro kangbo-release % cat release-v7.html
     });
   }
   
-  // 文明详细信息
+  // 文明详细信息（添加清朝）
   function getCivilizationDetail(name) {
     const details = {
       "明朝": "明朝(1368-1644)是中国历史上最后一个由汉族建立的大一统王朝，永乐年间达到鼎盛，郑和下西洋展示了强大的海上力量。",
+      "清朝": "清朝(1636-1912)是中国最后一个封建王朝，康乾盛世达到鼎盛，领土达到最大，但后期闭关锁国导致落后于西方工业革命。",
       "奥斯曼帝国": "奥斯曼帝国(1299-1922)是横跨亚欧非三大洲的帝国，苏莱曼大帝时期(1520-1566)达到鼎盛，控制了东西方贸易要道。",
       "西班牙帝国": "西班牙帝国(1469-1715)通过哥伦布发现美洲和殖民扩张成为第一个全球性帝国，1580年代达到顶峰，拥有无敌舰队。",
       "莫卧儿帝国": "莫卧儿帝国(1526-1857)统治南亚次大陆，阿克巴大帝和沙贾汗时期达到鼎盛，建造了泰姬陵等伟大建筑。"
@@ -397,7 +382,9 @@ mhjz@MHJZdeMacBook-Pro kangbo-release % cat release-v7.html
     {name:"拿破仑战争",start:1803,end:1815,importance:5,yLevel:0,detail:"法国与反法同盟战争，维也纳体系建立"},
     {name:"第一次世界大战",start:1914,end:1918,importance:5,yLevel:0,detail:"同盟国与协约国战争，凡尔赛体系形成"},
     {name:"第二次世界大战",start:1939,end:1945,importance:5,yLevel:0,detail:"轴心国与同盟国战争，联合国建立"},
-    {name:"冷战",start:1947,end:1991,importance:5,yLevel:0,detail:"美苏两大阵营对抗，核威慑平衡"}
+    {name:"冷战",start:1947,end:1991,importance:5,yLevel:0,detail:"美苏两大阵营对抗，核威慑平衡"},
+    {name:"鸦片战争",start:1840,end:1842,importance:4,yLevel:0,detail:"中国与英国的战争，中国战败，开始半殖民地化"},
+    {name:"甲午战争",start:1894,end:1895,importance:4,yLevel:0,detail:"中日战争，中国战败，签订《马关条约》"}
   ];
 
   // 绘制战争矩形
@@ -434,7 +421,8 @@ mhjz@MHJZdeMacBook-Pro kangbo-release % cat release-v7.html
     {name:"大萧条",start:1929,end:1939,importance:5,yLevel:1,detail:"华尔街股灾引发全球经济衰退，失业率飙升"},
     {name:"石油危机",start:1973,end:1975,importance:4,yLevel:1,detail:"石油禁运导致能源危机和全球经济滞胀"},
     {name:"亚洲金融危机",start:1997,end:1998,importance:4,yLevel:1,detail:"亚洲多国货币贬值，经济严重衰退"},
-    {name:"全球金融危机",start:2007,end:2009,importance:5,yLevel:1,detail:"次贷危机引发全球金融体系震荡"}
+    {name:"全球金融危机",start:2007,end:2009,importance:5,yLevel:1,detail:"次贷危机引发全球金融体系震荡"},
+    {name:"白银危机",start:1630,end:1640,importance:3,yLevel:1,detail:"明朝因白银流入减少导致经济衰退"}
   ];
 
   // 绘制经济危机矩形
@@ -462,7 +450,7 @@ mhjz@MHJZdeMacBook-Pro kangbo-release % cat release-v7.html
       d3.select(event.currentTarget).attr("opacity", 0.8);
     });
 
-  // 技术事件（优化去重版）
+  // 技术事件（优化去重版，添加中国相关技术）
   const techEvents = [
     {year:1440,name:"古腾堡印刷机",detail:"欧洲印刷革命开始，知识传播加速",importance:5,yLevel:2,type:"tech"},
     {year:1608,name:"望远镜发明",detail:"伽利略改进望远镜，开启天文观测新时代",importance:4,yLevel:2,type:"tech"},
@@ -472,7 +460,10 @@ mhjz@MHJZdeMacBook-Pro kangbo-release % cat release-v7.html
     {year:1903,name:"飞机发明",detail:"莱特兄弟首次动力飞行，开启航空时代",importance:5,yLevel:2,type:"tech"},
     {year:1947,name:"晶体管发明",detail:"贝尔实验室发明晶体管，电子革命开端",importance:5,yLevel:2,type:"tech"},
     {year:1969,name:"互联网诞生",detail:"ARPANET建立，计算机网络时代开始",importance:5,yLevel:2,type:"tech"},
-    {year:2007,name:"智能手机革命",detail:"iPhone发布，移动互联网普及",importance:4,yLevel:2,type:"tech"}
+    {year:2007,name:"智能手机革命",detail:"iPhone发布，移动互联网普及",importance:4,yLevel:2,type:"tech"},
+    {year:2003,name:"神舟五号",detail:"中国首次载人航天飞行，杨利伟成为首位中国航天员",importance:4,yLevel:2,type:"tech"},
+    {year:2016,name:"量子卫星",detail:"中国发射世界首颗量子科学实验卫星'墨子号'",importance:4,yLevel:2,type:"tech"},
+    {year:2020,name:"北斗系统",detail:"中国北斗三号全球卫星导航系统全面建成",importance:4,yLevel:2,type:"tech"}
   ];
   
   // 绘制技术事件
@@ -494,7 +485,7 @@ mhjz@MHJZdeMacBook-Pro kangbo-release % cat release-v7.html
     })
     .on("mouseout", ()=>tooltip.style("opacity", 0));
 
-  // 文化/政治事件（优化版）
+  // 文化/政治事件（优化版，添加中国相关事件）
   const cultureEvents = [
     {year:1453,name:"君士坦丁堡陷落",detail:"拜占庭帝国灭亡，奥斯曼帝国崛起，欧洲文艺复兴加速",importance:4,yLevel:3,type:"culture"},
     {year:1492,name:"哥伦布发现美洲",detail:"开启大航海时代和全球殖民扩张",importance:5,yLevel:3,type:"culture"},
@@ -504,7 +495,12 @@ mhjz@MHJZdeMacBook-Pro kangbo-release % cat release-v7.html
     {year:1789,name:"法国大革命",detail:"推翻君主专制，颁布人权宣言",importance:5,yLevel:3,type:"culture"},
     {year:1917,name:"十月革命",detail:"俄国建立第一个社会主义国家",importance:5,yLevel:3,type:"culture"},
     {year:1945,name:"联合国成立",detail:"建立战后国际秩序，维护世界和平",importance:5,yLevel:3,type:"culture"},
-    {year:1989,name:"冷战结束",detail:"柏林墙倒塌，两极格局终结",importance:5,yLevel:3,type:"culture"}
+    {year:1989,name:"冷战结束",detail:"柏林墙倒塌，两极格局终结",importance:5,yLevel:3,type:"culture"},
+    {year:1405,name:"郑和下西洋",detail:"明朝郑和七次下西洋，展示中国海上力量",importance:4,yLevel:3,type:"culture"},
+    {year:1911,name:"辛亥革命",detail:"推翻清朝统治，建立中华民国",importance:5,yLevel:3,type:"culture"},
+    {year:1949,name:"新中国成立",detail:"中华人民共和国成立",importance:5,yLevel:3,type:"culture"},
+    {year:1978,name:"改革开放",detail:"中国开始经济改革和对外开放政策",importance:5,yLevel:3,type:"culture"},
+    {year:2001,name:"加入WTO",detail:"中国加入世界贸易组织，加速融入全球经济",importance:4,yLevel:3,type:"culture"}
   ];
   
   // 绘制文化事件
@@ -526,31 +522,33 @@ mhjz@MHJZdeMacBook-Pro kangbo-release % cat release-v7.html
     })
     .on("mouseout", ()=>tooltip.style("opacity", 0));
 
-  // 科学家数据（优化显示，放在康波曲线下方）
+  // 科学家数据（优化显示，放在页面底部，添加中国科学家）
   const scientists = [
     // 第一康波周期 (1780-1840)
-    {name:"瓦特",country:"英国",birth:1736,death:1819,contribution:"改良蒸汽机，工业革命关键人物",wave:"第一康波",influence:5,year:1785,yLevel:4.5},
-    {name:"法拉第",country:"英国",birth:1791,death:1867,contribution:"电磁学奠基人，发现电磁感应",wave:"第一康波",influence:5,year:1821,yLevel:4.5},
+    {name:"瓦特",country:"英国",birth:1736,death:1819,contribution:"改良蒸汽机，工业革命关键人物",wave:"第一康波",influence:5,year:1785,yLevel:10},
+    {name:"法拉第",country:"英国",birth:1791,death:1867,contribution:"电磁学奠基人，发现电磁感应",wave:"第一康波",influence:5,year:1821,yLevel:10},
     
     // 第二康波周期 (1840-1890)
-    {name:"达尔文",country:"英国",birth:1809,death:1882,contribution:"进化论，生物学革命",wave:"第二康波",influence:5,year:1859,yLevel:4.5},
-    {name:"门捷列夫",country:"俄罗斯",birth:1834,death:1907,contribution:"元素周期表",wave:"第二康波",influence:4,year:1869,yLevel:4.5},
-    {name:"麦克斯韦",country:"英国",birth:1831,death:1879,contribution:"电磁理论统一者",wave:"第二康波",influence:5,year:1865,yLevel:4.5},
+    {name:"达尔文",country:"英国",birth:1809,death:1882,contribution:"进化论，生物学革命",wave:"第二康波",influence:5,year:1859,yLevel:10},
+    {name:"门捷列夫",country:"俄罗斯",birth:1834,death:1907,contribution:"元素周期表",wave:"第二康波",influence:4,year:1869,yLevel:10},
+    {name:"麦克斯韦",country:"英国",birth:1831,death:1879,contribution:"电磁理论统一者",wave:"第二康波",influence:5,year:1865,yLevel:10},
     
     // 第三康波周期 (1890-1940)
-    {name:"居里夫人",country:"波兰/法国",birth:1867,death:1934,contribution:"放射性研究，发现镭和钋",wave:"第三康波",influence:5,year:1898,yLevel:4.5},
-    {name:"爱因斯坦",country:"德国/美国",birth:1879,death:1955,contribution:"相对论，现代物理学革命",wave:"第三康波",influence:5,year:1905,yLevel:4.5},
-    {name:"玻尔",country:"丹麦",birth:1885,death:1962,contribution:"原子结构理论",wave:"第三康波",influence:4,year:1913,yLevel:4.5},
+    {name:"居里夫人",country:"波兰/法国",birth:1867,death:1934,contribution:"放射性研究，发现镭和钋",wave:"第三康波",influence:5,year:1898,yLevel:10},
+    {name:"爱因斯坦",country:"德国/美国",birth:1879,death:1955,contribution:"相对论，现代物理学革命",wave:"第三康波",influence:5,year:1905,yLevel:10},
+    {name:"玻尔",country:"丹麦",birth:1885,death:1962,contribution:"原子结构理论",wave:"第三康波",influence:4,year:1913,yLevel:10},
     
     // 第四康波周期 (1940-1990)
-    {name:"图灵",country:"英国",birth:1912,death:1954,contribution:"计算机科学之父",wave:"第四康波",influence:5,year:1936,yLevel:4.5},
-    {name:"冯·诺依曼",country:"匈牙利/美国",birth:1903,death:1957,contribution:"现代计算机架构",wave:"第四康波",influence:5,year:1945,yLevel:4.5},
-    {name:"费曼",country:"美国",birth:1918,death:1988,contribution:"量子电动力学",wave:"第四康波",influence:4,year:1965,yLevel:4.5},
+    {name:"图灵",country:"英国",birth:1912,death:1954,contribution:"计算机科学之父",wave:"第四康波",influence:5,year:1936,yLevel:10},
+    {name:"冯·诺依曼",country:"匈牙利/美国",birth:1903,death:1957,contribution:"现代计算机架构",wave:"第四康波",influence:5,year:1945,yLevel:10},
+    {name:"费曼",country:"美国",birth:1918,death:1988,contribution:"量子电动力学",wave:"第四康波",influence:4,year:1965,yLevel:10},
+    {name:"钱学森",country:"中国",birth:1911,death:2009,contribution:"中国航天之父",wave:"第四康波",influence:4,year:1956,yLevel:10},
     
     // 第五康波周期 (1990-2025)
-    {name:"伯纳斯-李",country:"英国",birth:1955,death:null,contribution:"发明万维网",wave:"第五康波",influence:5,year:1989,yLevel:4.5},
-    {name:"屠呦呦",country:"中国",birth:1930,death:null,contribution:"发现青蒿素",wave:"第五康波",influence:4,year:1972,yLevel:4.5},
-    {name:"霍金",country:"英国",birth:1942,death:2018,contribution:"黑洞理论研究",wave:"第五康波",influence:4,year:1974,yLevel:4.5}
+    {name:"伯纳斯-李",country:"英国",birth:1955,death:null,contribution:"发明万维网",wave:"第五康波",influence:5,year:1989,yLevel:10},
+    {name:"屠呦呦",country:"中国",birth:1930,death:null,contribution:"发现青蒿素",wave:"第五康波",influence:4,year:1972,yLevel:10},
+    {name:"霍金",country:"英国",birth:1942,death:2018,contribution:"黑洞理论研究",wave:"第五康波",influence:4,year:1974,yLevel:10},
+    {name:"袁隆平",country:"中国",birth:1930,death:2021,contribution:"杂交水稻之父",wave:"第五康波",influence:4,year:1973,yLevel:10}
   ];
   
   const starPath = "M0,-1L0.2245,-0.3090L0.9511,-0.3090L0.3633,0.1180L0.5878,0.8090L0,0.3820L-0.5878,0.8090L-0.3633,0.1180L-0.9511,-0.3090L-0.2245,-0.3090Z";
@@ -559,7 +557,7 @@ mhjz@MHJZdeMacBook-Pro kangbo-release % cat release-v7.html
     .enter().append("path")
     .attr("class","scientist-star")
     .attr("d", starPath)
-    .attr("transform", d => `translate(${xScale(d.year)},${yScale(d.yLevel)}) scale(${d.influence*4/5})`)
+    .attr("transform", d => `translate(${xScale(d.year)},${yScale(d.yLevel)}) scale(${d.influence*8/5})`) // 调大星星尺寸
     .attr("fill", "gold")
     .on("mouseover", (event,d)=>{
       tooltip.style("opacity", 1).html(`
@@ -614,11 +612,11 @@ mhjz@MHJZdeMacBook-Pro kangbo-release % cat release-v7.html
     svg.selectAll(".event-culture").style("display", visibility.event_culture ? null : "none");
     // 工业革命
     svg.selectAll(".industrial-label, .industrial-detail").style("display", visibility.industrial ? null : "none");
-    svg.selectAll("line[stroke='blue']").style("display", visibility.industrial ? null : "none");
+    svg.selectAll(".industrial-line, .industrial-bg").style("display", visibility.industrial ? null : "none");
     // 科学家
     svg.selectAll(".scientist-star").style("display", visibility.scientist ? null : "none");
     // 康波周期曲线
-    svg.selectAll(".kondratiev-wave, .wave-label").style("display", visibility.kondratiev ? null : "none");
+    svg.selectAll(".kondratiev-wave, .wave-group").style("display", visibility.kondratiev ? null : "none");
   }
 
   legend.selectAll(".legend-item").on("click", function(){
@@ -636,82 +634,3 @@ mhjz@MHJZdeMacBook-Pro kangbo-release % cat release-v7.html
 </script>
 </body>
 </html>
-mhjz@MHJZdeMacBook-Pro kangbo-release % ls
-event-data.json release-v2.html release-v4.html release-v6.html
-kb-re-v18.html  release-v3.html release-v5.html release-v7.html
-mhjz@MHJZdeMacBook-Pro kangbo-release % 
-mhjz@MHJZdeMacBook-Pro kangbo-release % 
-mhjz@MHJZdeMacBook-Pro kangbo-release % ll
-total 360
--rw-r--r--  1 mhjz  staff     1B  8  6 17:06 event-data.json
--rw-r--r--@ 1 mhjz  staff    12K  8  6 17:02 kb-re-v18.html
--rw-r--r--@ 1 mhjz  staff    22K  8  6 17:23 release-v2.html
--rw-r--r--@ 1 mhjz  staff    22K  8  6 17:34 release-v3.html
--rw-r--r--@ 1 mhjz  staff    26K  8  6 18:15 release-v4.html
--rw-r--r--@ 1 mhjz  staff    28K  8  6 18:34 release-v5.html
--rw-r--r--@ 1 mhjz  staff    28K  8  6 18:49 release-v6.html
--rw-r--r--@ 1 mhjz  staff    28K  8  7 11:26 release-v7.html
-mhjz@MHJZdeMacBook-Pro kangbo-release % 
-mhjz@MHJZdeMacBook-Pro kangbo-release % 
-mhjz@MHJZdeMacBook-Pro kangbo-release % 
-mhjz@MHJZdeMacBook-Pro kangbo-release % vim release-v7.html
-mhjz@MHJZdeMacBook-Pro kangbo-release % ls
-event-data.json release-v2.html release-v4.html release-v6.html
-kb-re-v18.html  release-v3.html release-v5.html release-v7.html
-mhjz@MHJZdeMacBook-Pro kangbo-release % 
-mhjz@MHJZdeMacBook-Pro kangbo-release % 
-mhjz@MHJZdeMacBook-Pro kangbo-release % 
-mhjz@MHJZdeMacBook-Pro kangbo-release % 
-mhjz@MHJZdeMacBook-Pro kangbo-release % echo ''> release-v7.html
-mhjz@MHJZdeMacBook-Pro kangbo-release % vim release-v7.html
-mhjz@MHJZdeMacBook-Pro kangbo-release % vim release-v7.html
-mhjz@MHJZdeMacBook-Pro kangbo-release % vim release-v8.html
-mhjz@MHJZdeMacBook-Pro kangbo-release % vim release-v8.html
-mhjz@MHJZdeMacBook-Pro kangbo-release % ls
-event-data.json release-v2.html release-v4.html release-v6.html release-v8.html
-kb-re-v18.html  release-v3.html release-v5.html release-v7.html
-mhjz@MHJZdeMacBook-Pro kangbo-release % 
-mhjz@MHJZdeMacBook-Pro kangbo-release % 
-mhjz@MHJZdeMacBook-Pro kangbo-release % 
-mhjz@MHJZdeMacBook-Pro kangbo-release % vim release-v8.html
-
-  1 <!DOCTYPE html>
-  2 <html lang="zh">
-  3 <head>
-  4 <meta charset="UTF-8" />
-  5 <title>康波周期+全球霸权+工业革命+科学家全景图（文明之光版）</title>
-  6 <script src="https://d3js.org/d3.v7.min.js"></script>
-  7 <style>
-  8   body { font-family: "Microsoft YaHei", sans-serif; background: #f8f8f8; margin:0; padding:0;}
-  9   #chart { background: white; margin: 10px auto; width: 98vw; height: 1400px; position: relative;}
- 10   svg { display: block; margin: auto; background: white; box-shadow: 0 0 5px rgba(0,0,0,0.1);}
- 11   .tooltip {
- 12     position: absolute; background: rgba(0,0,0,0.9); color: white;
- 13     padding: 12px; border-radius: 8px; pointer-events: none; font-size: 14px;
- 14     max-width: 350px; z-index: 10; line-height: 1.5;
- 15   }
- 16   .nation-path.major { stroke-width: 12; opacity: 0.85; cursor: pointer;}
- 17   .nation-path.minor { stroke-width: 6; opacity: 0.65; cursor: pointer;}
- 18   .event-circle, .scientist-star, .industrial-rect, .culture-circle, .war-rect, .crisis-rect {
- 19     cursor: pointer;
- 20   }
- 21   .war-rect {
- 22     opacity: 0.7;
- 23   }
- 24   .crisis-rect {
- 25     opacity: 0.8;
- 26     rx: 5;
- 27     ry: 5;
- 28   }
- 29   .legend {
- 30     font-size: 14px; user-select:none;
- 31     background: #fff; border: 1px solid #ccc; padding: 12px 16px; border-radius: 10px;
- 32     box-shadow: 0 0 10px rgba(0,0,0,0.2);
- 33     position: fixed; top: 10px; left: 50%; transform: translateX(-50%);
- 34     display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; z-index: 20;
- 35     max-width: 92%;
- 36   }
- 37   .legend-item {
- 38     cursor: pointer; display: flex; align-items: center; gap: 8px;
- 39     white-space: nowrap;
-"release-v8.html" 636L, 31368B

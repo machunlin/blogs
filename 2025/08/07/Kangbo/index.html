@@ -5,9 +5,42 @@
 <title>康波周期+全球霸权+工业革命+科学家全景图（文明之光版）</title>
 <script src="https://d3js.org/d3.v7.min.js"></script>
 <style>
-  body { font-family: "Microsoft YaHei", sans-serif; background: #f8f8f8; margin:0; padding:0;}
-  #chart { background: white; margin: 10px auto; width: 98vw; height: 1400px; position: relative;}
-  svg { display: block; margin: auto; background: white; box-shadow: 0 0 5px rgba(0,0,0,0.1);}
+  :root{
+    --bg: #f8f8f8;
+    --text: #1f2937;
+    --chart-start: #ffffff;
+    --chart-end: #ffffff;
+    --card-start: rgba(250,250,252,1);
+    --card-end: #ffffff;
+    --muted: #6b7280;
+    --legend-bg: rgba(255,255,255,0.9);
+  }
+
+  .theme-dark{
+    --bg: #0b2030; /* 换成比之前略亮的深色 */
+    --text: #e6eef8;
+    --chart-start: #091824;
+    --chart-end: #0e2733;
+    --card-start: rgba(12,24,36,0.95);
+    --card-end: rgba(10,18,28,0.98);
+    --muted: #cbd5e1;
+    --legend-bg: rgba(255,255,255,0.04);
+  }
+
+  .theme-light{
+    --bg: #f8f8f8;
+    --text: #1f2937;
+    --chart-start: #ffffff;
+    --chart-end: #ffffff;
+    --card-start: rgba(250,250,252,1);
+    --card-end: #ffffff;
+    --muted: #6b7280;
+    --legend-bg: rgba(255,255,255,0.9);
+  }
+
+  body { font-family: "Microsoft YaHei", sans-serif; background: var(--bg); margin:0; padding:0; color: var(--text);}
+  #chart { background: linear-gradient(180deg,var(--chart-start),var(--chart-end)); margin: 10px auto; width: 98vw; height: 1400px; position: relative;}
+  svg { display: block; margin: auto; background: transparent; box-shadow: 0 8px 30px rgba(0,0,0,0.6);} 
   .tooltip {
     position: absolute; background: rgba(0,0,0,0.9); color: white;
     padding: 12px; border-radius: 8px; pointer-events: none; font-size: 14px;
@@ -27,11 +60,11 @@
     ry: 5;
   }
   .legend {
-    font-size: 14px; user-select:none;
-    background: #fff; border: 1px solid #ccc; padding: 12px 16px; border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    font-size: 13px; user-select:none; color: var(--text);
+    background: var(--legend-bg); border: 1px solid rgba(255,255,255,0.06); padding: 8px 12px; border-radius: 8px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.6);
     position: fixed; top: 10px; left: 50%; transform: translateX(-50%);
-    display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; z-index: 20;
+    display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; z-index: 30;
     max-width: 92%;
   }
   .legend-item {
@@ -39,19 +72,19 @@
     white-space: nowrap;
   }
   .legend-color {
-    width: 20px; height: 20px; border-radius: 4px;
-    border: 1px solid #999;
+    width: 16px; height: 16px; border-radius: 3px;
+    border: 1px solid rgba(255,255,255,0.18);
   }
   .legend-item.disabled .legend-color {
     opacity: 0.3;
   }
   .legend-color.major { border-width: 2px; }
   text.axis-label {
-    font-size: 14px; fill: #333;
+    font-size: 14px; fill: var(--muted);
   }
   h2 {
     text-align:center; margin:10px 0; padding-top: 80px;
-    font-size: 24px; color: #333;
+    font-size: 24px; color: var(--text);
   }
   .civilization-path {
     stroke-width: 8; opacity: 0.7; cursor: pointer;
@@ -85,6 +118,32 @@
   .industrial-bg {
     opacity: 0.1;
   }
+  /* 说明区样式（优化 UI） */
+  #explanation{
+    background: linear-gradient(180deg, var(--card-start), var(--card-end));
+    margin:24px auto 48px; padding:22px 26px; border-radius:12px; max-width:1100px;
+    box-shadow:0 12px 30px rgba(0,0,0,0.6); color:var(--text); line-height:1.7; font-size:16px;
+  }
+  #explanation .ex-hero{display:flex;gap:14px;align-items:flex-start}
+  #explanation .ex-hero .ex-icon{font-size:34px;line-height:1}
+  #explanation .ex-hero .ex-title{font-size:20px;font-weight:700;color:#0f172a;margin:0}
+  #explanation .ex-hero .ex-sub{color:var(--muted);margin:6px 0 0}
+  #explanation h4{margin:14px 0 8px;color:#0b66c2;font-size:16px}
+  #explanation .ex-grid{display:grid;grid-template-columns:1fr;gap:12px}
+  @media(min-width:900px){#explanation .ex-grid{grid-template-columns:1fr 1fr}}
+  #explanation .callout{border-left:4px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);padding:12px 14px;border-radius:8px}
+  #explanation .callout.industrial{border-left-color: rgba(191,219,254,0.9)}
+  #explanation .callout.kond{border-left-color: rgba(189,236,239,0.9)}
+  #explanation .callout.warning{border-left-color: rgba(254,226,226,0.9);background:rgba(255,255,255,0.02)}
+  #explanation ul.ex-list{padding-left:18px;margin:8px 0}
+  #explanation .meta{color:#6b7280;font-size:14px;margin-top:8px}
+  #explanation .anchor-link{display:inline-block;margin-left:8px;color:#0b66c2;text-decoration:none}
+  /* 关于按钮样式 */
+  #about-btn{position:fixed;right:18px;top:74px;background:#0b66c2;color:#fff;border:none;padding:8px 12px;border-radius:8px;box-shadow:0 6px 18px rgba(11,102,194,0.18);cursor:pointer;z-index:40}
+  @media(max-width:640px){#about-btn{right:12px;top:76px;padding:8px 10px;font-size:14px}}
+  /* 主题切换按钮 */
+  #theme-toggle{position:fixed;right:110px;top:74px;background:transparent;color:var(--text);border:1px solid rgba(255,255,255,0.08);padding:6px 10px;border-radius:8px;cursor:pointer;z-index:40}
+  @media(max-width:640px){#theme-toggle{right:96px;top:76px;padding:6px 8px;font-size:13px}}
 </style>
 </head>
 <body>
@@ -121,6 +180,10 @@
     <div class="legend-color" style="background:teal; border: none;"></div>康波周期曲线
   </div>
 </div>
+<!-- 顶部关于按钮 -->
+<button id="about-btn" aria-label="关于本图" title="关于本图">关于</button>
+<!-- 主题切换按钮 -->
+<button id="theme-toggle" aria-label="切换主题" title="切换主题">亮/暗</button>
 <div id="chart"></div>
 <div class="tooltip" id="tooltip" style="opacity:0;"></div>
 <script>
@@ -632,5 +695,159 @@
   updateVisibility();
 })();
 </script>
+<!-- 页面说明（面向普通读者的简单说明） -->
+<section id="explanation">
+  <div id="ex-summary" style="margin-bottom:12px">
+    <p style="margin:0;color:#374151;">世界周期律与未来投资地图：一份基于宏观图景的战略解读</p>
+    <a href="#" id="ex-toggle" style="color:#0b66c2;margin-left:8px;text-decoration:none">展开全文</a>
+  </div>
+  <div id="ex-full" style="display:none">
+    <div class="ex-hero">
+      <div class="ex-icon">🧭</div>
+      <div>
+        <h3 class="ex-title">世界周期律与未来投资地图：一份基于宏观图景的战略解读</h3>
+        <div class="ex-sub">你眼前的这张图，是历史学家、经济学家和技术架构师共同关注的“世界运行底层代码”的可视化。它不只是历史叙事，而是一张用来观察长期趋势并帮助决策的宏观周期分析地图。</div>
+      </div>
+    </div>
+
+    <div class="ex-grid" style="margin-top:14px">
+      <div>
+        <h4>I. ⏳ 时间与系统的框架（横轴、战争与危机）</h4>
+        <div class="callout kond">
+          <strong>1. 🕰 时间轴（横轴）：周期与线性叙事的对决</strong>
+          <div class="meta">技术分析：横轴显示的是线性时间，但重要事件并非均匀分布。某些时期事件密集（例如 1914–1945、1990–2010），这些高密度区通常是旧系统崩溃与新系统重建的关键阶段。</div>
+          <div class="meta">策略启示：创业者与决策者应关注这些高密度期，因为危机与重组往往带来监管空白与需求暴增，是颠覆性创新的窗口期。</div>
+        </div>
+
+        <div style="height:10px"></div>
+        <div class="callout warning">
+          <strong>2. ⚔️ 战争与危机（灰色/红色矩形）：系统重置与资源再分配</strong>
+          <div class="meta">核心关联：灰色代表战争，红色代表重大经济危机；它们常出现在康波下降或低谷，以及国家权力交替的阶段。</div>
+          <div class="meta">专业解读：经济危机是对旧产业的“创造性破坏”，会把资本与人才导向下一代核心技术；战争则通过暴力重写规则并重新分配全球资源。</div>
+          <div class="meta">架构思考：在危机期，技术投入应优先考虑降本增效、自主可控和基础能力，而非以消费端快速扩张为主。</div>
+        </div>
+      </div>
+
+      <div>
+        <h4>II. 💡 驱动周期的核心引擎（经济波浪与工业革命）</h4>
+        <div class="callout industrial">
+          <strong>3. 🌊 经济波浪线（青色）：周期性波动与逆周期投资</strong>
+          <div class="meta">技术分析：康波周期可分阶段运行。当前我们正处于第五康波（信息技术）的后段，向第六康波（K6：AI / 生命科学 / 绿色能源）过渡。</div>
+          <div class="meta">专业解读：波峰时期资本充沛、适合应用层创新；波谷时期资本谨慎，但正是进行底层技术与基础设施投入的最佳时机。伟大的公司往往在萧条期孕育。</div>
+        </div>
+
+        <div style="height:10px"></div>
+        <div class="callout">
+          <strong>4. ⚙️ 工业革命与技术火种（蓝色区域 + 金色星星）：范式与奇点</strong>
+          <div class="meta">核心关联：蓝色区域表示技术范式演进，金色星星标注重要科学家或突破点；科学突破常常先于周期启动，是后续大规模技术扩散的源头。</div>
+          <div class="meta">架构思考：从连接人的互联网，转向连接数据与机器的工业互联网、边缘计算与智能 Agent，是下一轮落地的关键方向。</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:14px">
+      <h4>III. 👑 权力与趋势的交织（国家曲线与联系线）</h4>
+      <div class="callout">
+        <strong>5. 👑 国家权力曲线（彩色）：霸权的生命周期与技术壁垒</strong>
+        <div class="meta">核心关联：一国的巅峰通常与其对当期工业革命关键技术的垄断与输出能力相关。霸权交接期意味着供应链与标准可能被重写。</div>
+        <div class="meta">专业示例：英国领先于蒸汽与制造，美国主导了计算机與互联网，中国在 I4 向 I5 的跃迁中快速上升。</div>
+        <div class="meta">策略启示：结合国家战略寻找机会，在新标准与生态中争取先发位置。</div>
+      </div>
+
+      <div style="height:10px"></div>
+      <div class="callout">
+        <strong>6. 🔗 事件联系线：历史的网状结构与因果链</strong>
+        <div class="meta">技术分析：图中各类事件并非孤立发生，而是通过“科学家 → 技术事件 → 康波波峰”与“康波波谷 → 危机/战争 → 权力更替”的链条相互连接。</div>
+        <div class="meta">理解这些联系有助于把握技术、经济与地缘政治如何共同塑造长期格局。</div>
+      </div>
+    </div>
+
+    <div style="margin-top:14px" class="callout">
+      <h4>结语</h4>
+      <p class="meta">这张图并非给予确定性的预测，而是提供一种将历史事件、技术突破与国家力量联系起来的宏观视角。</p>
+    </div>
+  </div>
+</section>
+<script>
+// 关于按钮、折叠说明与平滑滚动
+(function(){
+  const aboutBtn = document.getElementById('about-btn');
+  const exSection = document.getElementById('explanation');
+  const exToggle = document.getElementById('ex-toggle');
+  const exFull = document.getElementById('ex-full');
+
+  function smoothScrollTo(el){
+    const offset = 20; // 少量顶部间距
+    const top = el.getBoundingClientRect().top + window.pageYOffset - offset;
+    window.scrollTo({top, behavior:'smooth'});
+  }
+
+  aboutBtn.addEventListener('click', ()=>{
+    // 展开并滚动
+    if(exFull.style.display === 'none') {
+      exFull.style.display = 'block';
+      exToggle.textContent = '收起全文';
+    }
+    smoothScrollTo(exSection);
+  });
+
+  exToggle.addEventListener('click', (e)=>{
+    e.preventDefault();
+    if(exFull.style.display === 'none'){
+      exFull.style.display = 'block';
+      exToggle.textContent = '收起全文';
+    } else {
+      exFull.style.display = 'none';
+      exToggle.textContent = '展开全文';
+      smoothScrollTo(exSection);
+    }
+  });
+
+  // 移动端：当屏幕宽度小于 640 时，让 summary 可点击以展开
+  if(window.matchMedia && window.matchMedia('(max-width:640px)').matches){
+    document.getElementById('ex-summary').addEventListener('click', ()=>{
+      if(exFull.style.display === 'none'){
+        exFull.style.display = 'block'; exToggle.textContent='收起全文';
+      }
+    });
+  }
+})();
+</script>
+<script>
+// 主题切换：保存到 localStorage，切换 body class
+(function(){
+  const themeBtn = document.getElementById('theme-toggle');
+  const root = document.body;
+  function applyTheme(t){
+    if(t === 'dark'){
+      root.classList.remove('theme-light');
+      root.classList.add('theme-dark');
+      themeBtn.textContent = '亮/暗';
+    } else {
+      root.classList.remove('theme-dark');
+      root.classList.add('theme-light');
+      themeBtn.textContent = '亮/暗';
+    }
+    try{ localStorage.setItem('site-theme', t); }catch(e){}
+  }
+
+  // 初始化：优先使用 localStorage，其次检测 prefers-color-scheme
+  let saved = null;
+  try{ saved = localStorage.getItem('site-theme'); }catch(e){}
+  if(!saved){
+    if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) saved = 'dark';
+    else saved = 'light';
+  }
+  applyTheme(saved);
+
+  themeBtn.addEventListener('click', ()=>{
+    const now = document.body.classList.contains('theme-dark') ? 'dark' : 'light';
+    const next = now === 'dark' ? 'light' : 'dark';
+    applyTheme(next);
+  });
+})();
+</script>
 </body>
 </html>
+
+
